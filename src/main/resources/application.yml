@@ -1,5 +1,6 @@
 server:
   port: 9000
+
 logging:
   level:
     org: info
@@ -8,6 +9,13 @@ logging:
 spring:
   mvc:
     static-path-pattern: /static/**
+---
+
+spring:
+  profiles:
+    active: local
+
+# Local profile configuration
 ---
 spring:
   config:
@@ -26,11 +34,9 @@ spring:
   jpa:
     defer-datasource-initialization: false
     show-sql: true
-  logging:
-    level:
-      org: info
-      com: off
 
+
+# Production profile configuration
 ---
 spring:
   config:
