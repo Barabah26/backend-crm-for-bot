@@ -23,8 +23,9 @@ public class StatementController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteStatement(@PathVariable("id") Long statementId){
-        statementService.deleteStatement(statementId);
-        return ResponseEntity.ok("Statement deleted successfully!");
+    public ResponseEntity<String> updateStatementStatus(@PathVariable("id") Long statementId){
+        statementService.updateStatementStatus(statementId);
+        return ResponseEntity.ok("Statement status updated successfully!");
     }
 }
+

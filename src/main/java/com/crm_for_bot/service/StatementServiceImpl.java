@@ -19,7 +19,7 @@ public class StatementServiceImpl implements StatementService {
 
     @Override
     public List<StatementDto> getStatements() {
-        List<Statement> statements = statementRepository.findAll();
+        List<Statement> statements = statementRepository.findByStatusFalse();
         if (statements.isEmpty()) {
             throw new RecourseNotFoundException("Statements are not found");
         }
@@ -27,12 +27,12 @@ public class StatementServiceImpl implements StatementService {
                 .map(StatementMapper::mapToStatementDto)
                 .collect(Collectors.toList());
     }
-
     @Override
-    public void deleteStatement(Long statementId) {
+    public void updateStatementStatus(Long statementId) {
         Statement statement = statementRepository.findById(statementId).orElseThrow(
                 () -> new RecourseNotFoundException("Statement is not found with id: " + statementId)
         );
-        statementRepository.deleteById(statementId);
+        statement.setStatus(true);  // Оновлення статусу на true
+        statementRepository.save(statement);
     }
 }

@@ -8,5 +8,5 @@ import java.util.List;
 public interface StatementService {
     List<StatementDto> getStatements();
 
-    void deleteStatement(Long statementId);
+    void updateStatementStatus(Long statementId);
 }
