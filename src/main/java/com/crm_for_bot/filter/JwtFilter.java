@@ -12,8 +12,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -22,9 +20,7 @@ import org.springframework.web.filter.GenericFilterBean;
 import java.io.IOException;
 import java.util.List;
 
-@Slf4j
 @Component
-@RequiredArgsConstructor
 public class JwtFilter extends GenericFilterBean {
 
     private static final String AUTHORIZATION = "Authorization";
@@ -32,6 +28,12 @@ public class JwtFilter extends GenericFilterBean {
     private final JwtProvider jwtProvider;
     private final AuthService authService;
     private final UserService userService;
+
+    public JwtFilter(JwtProvider jwtProvider, AuthService authService, UserService userService) {
+        this.jwtProvider = jwtProvider;
+        this.authService = authService;
+        this.userService = userService;
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain fc)
@@ -57,7 +59,7 @@ public class JwtFilter extends GenericFilterBean {
                 }
             }
         } catch (Exception e) {
-            log.error("Error processing JWT", e);
+            logger.error("Error processing JWT", e);
         }
         fc.doFilter(request, response);
     }
