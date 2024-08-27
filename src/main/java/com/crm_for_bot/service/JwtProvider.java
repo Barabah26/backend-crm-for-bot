@@ -19,13 +19,14 @@ import java.util.Date;
 
 @Slf4j
 @Component
+
 public class JwtProvider {
 
-    public static final int ACCESS_LEAVE_MINUTES = 5;
+    public static final int ACCESS_LEAVE_MINUTES = 30   ;
+    public static final int ACCESS_LEAVE_HOURS = 24;
     public static final int REFRESH_LEAVE_DAYS = 30;
     private final SecretKey jwtAccessSecret;
     private final SecretKey jwtRefreshSecret;
-
 
     public JwtProvider(
             @Value("${jwt.secret.access}") String jwtAccessSecret,
@@ -36,14 +37,13 @@ public class JwtProvider {
 
     public String generateAccessToken(@NonNull User user) {
         final LocalDateTime now = LocalDateTime.now();
-        final Instant accessExpirationInstant = now.plusMinutes(ACCESS_LEAVE_MINUTES).atZone(ZoneId.systemDefault()).toInstant();
+        final Instant accessExpirationInstant = now.plusHours(ACCESS_LEAVE_HOURS).atZone(ZoneId.systemDefault()).toInstant();
         final Date accessExpiration = Date.from(accessExpirationInstant);
         return Jwts.builder()
                 .setSubject(user.getUserName())
                 .setExpiration(accessExpiration)
                 .signWith(jwtAccessSecret)
-                .claim("roles", user.getRoles())
-                .claim("firstName", user.getUserName())
+                .claim("userId", user.getUserId())
                 .compact();
     }
 
@@ -56,14 +56,6 @@ public class JwtProvider {
                 .setExpiration(refreshExpiration)
                 .signWith(jwtRefreshSecret)
                 .compact();
-    }
-
-    public boolean validateAccessToken(@NonNull String accessToken) {
-        return validateToken(accessToken, jwtAccessSecret);
-    }
-
-    public boolean validateRefreshToken(@NonNull String refreshToken) {
-        return validateToken(refreshToken, jwtRefreshSecret);
     }
 
     private boolean validateToken(@NonNull String token, @NonNull Key secret) {
@@ -85,6 +77,14 @@ public class JwtProvider {
             log.error("invalid token", e);
         }
         return false;
+    }
+
+    public boolean validateAccessToken(@NonNull String accessToken) {
+        return validateToken(accessToken, jwtAccessSecret);
+    }
+
+    public boolean validateRefreshToken(@NonNull String refreshToken) {
+        return validateToken(refreshToken, jwtRefreshSecret);
     }
 
     public Claims getAccessClaims(@NonNull String token) {

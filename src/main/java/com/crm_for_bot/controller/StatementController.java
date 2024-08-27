@@ -17,7 +17,7 @@ public class StatementController {
 
     @GetMapping
     public ResponseEntity<List<StatementDto>> getAllStatements() {
-        List<StatementDto> statements = statementService.getStatements();
+        List<StatementDto> statements = statementService.getStatementsInfoWithStatusFalse();
         return ResponseEntity.ok(statements);
     }
 

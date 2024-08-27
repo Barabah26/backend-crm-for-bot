@@ -14,7 +14,8 @@ public class StatementDto {
     private String fullName;
     private String groupName;
     private String phoneNumber;
-    private String statement;
+    private String typeOfStatement;
+    private String institute;
     private String yearEntry;
 
 }

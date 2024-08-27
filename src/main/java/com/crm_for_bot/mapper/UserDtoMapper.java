@@ -2,18 +2,18 @@ package com.crm_for_bot.mapper;
 
 import com.crm_for_bot.dto.UserDto;
 import com.crm_for_bot.entity.User;
-import org.springframework.stereotype.Service;
+import org.mapstruct.Mapper;
 
-@Service
-public class UserDtoMapper extends DtoMapperFacade<User, UserDto> {
+import java.util.List;
 
-    public UserDtoMapper() {
-        super(User.class, UserDto.class);
-    }
+@Mapper(componentModel = "spring")
+public interface UserDtoMapper extends Mappable<User, UserDto> {
+    @Override
+    User toEntity(UserDto dto);
 
     @Override
-    protected void decorateDto(UserDto dto, User user) {
-        dto.setUserName(user.getUserName());
-        dto.setSysRoles(String.valueOf(user.getRoles()));
-    }
+    UserDto toDto(User entity);
+
+    @Override
+    List<UserDto> toDto(List<User> entity);
 }

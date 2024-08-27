@@ -1,6 +1,6 @@
 package com.crm_for_bot.config;
 
-import com.crm_for_bot.filter.JwtFilter;
+import com.crm_for_bot.filter.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtFilter jwtFilter;
+    private final JwtRequestFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/", "/api/auth/login", "/api/auth/token", "/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**",
+                                .requestMatchers("/", "/api/auth/login", "/api/auth/revoke", "/api/jwt/", "/api/auth/token", "/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**",
                                         "/webjars/swagger-ui/**", "/h2-console/**").permitAll()
                                 .requestMatchers("/api/statements/**").authenticated()
                                 .anyRequest().authenticated()

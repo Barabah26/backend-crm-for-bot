@@ -27,18 +27,11 @@ public class User {
     @Column(name = "encrypted_password", length = 128, nullable = false)
     private String encryptedPassword;
 
-    @Column(name = "enabled", length = 1, nullable = false)
-    private boolean enabled;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<Role> roles = new HashSet<>();
-
     @Override public String toString() {
         return "SysUser{" +
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
                 ", encryptedPassword='" + encryptedPassword + '\'' +
-                ", enabled=" + enabled +
                 '}';
     }
 }

@@ -29,7 +29,7 @@ spring:
 
 spring:
   profiles:
-    active: local
+    active: prod
 
 # Local profile configuration
 ---
@@ -66,7 +66,7 @@ spring:
       data-locations: classpath:data.sql
       schema-locations: classpath:schema-postgres.sql
   datasource:
-    url: jdbc:postgresql://localhost:5432/data
+    url: jdbc:postgresql://localhost:5432/crmDATA
     username: root
     password: root
     driver-class-name: org.postgresql.Driver
