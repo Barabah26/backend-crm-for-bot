@@ -14,13 +14,10 @@ import lombok.Setter;
 @Entity
 @Table(name = "statements_info")
 public class StatementInfo {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
-
-    @Column(name = "statement_id", nullable = false, unique = true)
-    private Long statementId;
 
     @Column(name = "is_ready")
     private Boolean isReady;

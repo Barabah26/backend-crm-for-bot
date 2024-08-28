@@ -3,8 +3,7 @@ DROP TABLE IF EXISTS statements;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE statements_info (
-                                 id BIGSERIAL PRIMARY KEY,
-                                 statement_id BIGINT NOT NULL UNIQUE,
+                                 id BIGINT NOT NULL UNIQUE,
                                  is_ready BOOLEAN,
                                  status BOOLEAN,
                                  creation_date TIMESTAMP NULL,

@@ -28,6 +28,9 @@ public class AuthService {
     }
 
     public JwtResponse login(@NonNull JwtRequest authRequest) {
+        if (authRequest.getUsername() == null) {
+            throw new AuthException("Username is null");
+        }
         final User user = userService.getByLogin(authRequest.getUsername())
                 .orElseThrow(() -> new AuthException("User not found"));
 

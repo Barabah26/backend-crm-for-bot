@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 public class StatementServiceImpl implements StatementService {
 
     private final StatementRepository statementRepository;
-    private final StatementDtoMapper statementDtoMapper;
 
     @Override
     public List<StatementDto> getStatementsInfoWithStatusFalse() {
