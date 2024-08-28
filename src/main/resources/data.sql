@@ -13,7 +13,7 @@ INSERT INTO statements (full_name, group_name, phone_number, institute, type_of_
                                                                                                                         ('Павленко Ірина Василівна', 'КН43с', '+380987654331', 'Інститут комп’ютерних наук', 'Довідка з місця навчання', 1234567800, '2021'),
                                                                                                                         ('Романенко Юлія Іванівна', 'КН43с', '+380987654332', 'Інститут комп’ютерних наук', 'Довідка з місця навчання', 1234567801, '2021');
 
-INSERT INTO statements_info (statement_id, is_ready, status) VALUES
+INSERT INTO statements_info (id, is_ready, status) VALUES
                                                                  (1, FALSE, FALSE),
                                                                  (2, FALSE, FALSE),
                                                                  (3, FALSE, FALSE),
