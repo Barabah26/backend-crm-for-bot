@@ -11,7 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -28,11 +30,12 @@ public class AuthService {
     }
 
     public JwtResponse login(@NonNull JwtRequest authRequest) {
-        if (authRequest.getUsername() == null) {
+        if (authRequest.getLogin() == null) {
             throw new AuthException("Username is null");
         }
-        final User user = userService.getByLogin(authRequest.getUsername())
+        final User user = userService.getByLogin(authRequest.getLogin())
                 .orElseThrow(() -> new AuthException("User not found"));
+        
 
         if (passwordEncoder.matches(authRequest.getPassword(), user.getEncryptedPassword())) {
             final String accessToken = jwtProvider.generateAccessToken(user);

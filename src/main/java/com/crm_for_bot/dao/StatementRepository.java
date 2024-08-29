@@ -17,7 +17,5 @@ public interface StatementRepository extends JpaRepository<StatementInfo, Long> 
             nativeQuery = true)
     List<Object[]> findStatementsInfoWithStatusFalse();
 
-
-    ;
 }
 
