@@ -1,6 +1,8 @@
-DROP TABLE IF EXISTS statements_info;
+DROP TABLE IF EXISTS user_roles CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS statements;
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS statements_info;
 
 CREATE TABLE statements_info (
                                  id BIGINT NOT NULL UNIQUE,
@@ -26,3 +28,17 @@ CREATE TABLE users (
                        user_name VARCHAR(36) NOT NULL,
                        encrypted_password VARCHAR(128) NOT NULL
 );
+
+CREATE TABLE roles (
+                       id BIGSERIAL PRIMARY KEY,
+                       name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE user_roles (
+                            user_id BIGINT NOT NULL,
+                            role_id BIGINT NOT NULL,
+                            FOREIGN KEY (user_id) REFERENCES users(user_id),
+                            FOREIGN KEY (role_id) REFERENCES roles(id),
+                            PRIMARY KEY (user_id, role_id)
+);
+

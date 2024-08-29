@@ -1,5 +1,6 @@
 package com.crm_for_bot.service;
 
+import com.crm_for_bot.entity.Role;
 import com.crm_for_bot.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -16,6 +17,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -39,13 +42,19 @@ public class JwtProvider {
         final LocalDateTime now = LocalDateTime.now();
         final Instant accessExpirationInstant = now.plusHours(ACCESS_LEAVE_HOURS).atZone(ZoneId.systemDefault()).toInstant();
         final Date accessExpiration = Date.from(accessExpirationInstant);
+
+        // Отримання ролей користувача
+        List<String> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toList());
+
         return Jwts.builder()
                 .setSubject(user.getUserName())
                 .setExpiration(accessExpiration)
                 .signWith(jwtAccessSecret)
                 .claim("userId", user.getUserId())
+                .claim("roles", roles)
                 .compact();
     }
+
 
     public String generateRefreshToken(@NonNull User user) {
         final LocalDateTime now = LocalDateTime.now();

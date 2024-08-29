@@ -1,6 +1,6 @@
 package com.crm_for_bot.service;
 
-import com.crm_for_bot.dao.StatementRepository;
+import com.crm_for_bot.repository.StatementRepository;
 import com.crm_for_bot.dto.StatementDto;
 import com.crm_for_bot.entity.StatementInfo;
 import com.crm_for_bot.exception.RecourseNotFoundException;

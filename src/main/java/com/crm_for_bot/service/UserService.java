@@ -11,6 +11,5 @@ public interface UserService {
      Optional<User> getByLogin(@NonNull String login);
      UserDto registerUser(UserDto userDto);
      List<User> getAllUsers();
-
      void deleteUserById(Long id);
 }

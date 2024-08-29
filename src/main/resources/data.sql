@@ -32,3 +32,12 @@ INSERT INTO statements_info (id, is_ready, status) VALUES
 INSERT INTO users (user_name, encrypted_password)
 VALUES ('user', '$2a$10$BXH1wlAJPIMXvjnJTBoRuea4CvZwSs8/Zqz4bDRZBDJ6hxvXoHlqq'),
        ('admin', '$2a$10$BXH1wlAJPIMXvjnJTBoRuea4CvZwSs8/Zqz4bDRZBDJ6hxvXoHlqq');
+
+INSERT INTO roles (name) VALUES
+                             ('USER'),
+                             ('ADMIN');
+
+iNSERT INTO user_roles (user_id, role_id) VALUES
+                                            (1, 1),
+                                            (2, 2);
+

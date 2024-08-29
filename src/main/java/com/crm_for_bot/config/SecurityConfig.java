@@ -37,7 +37,8 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/", "/api/auth/login", "/api/auth/revoke", "/api/jwt/", "/api/auth/token", "/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**",
                                         "/webjars/swagger-ui/**", "/h2-console/**").permitAll()
-                                .requestMatchers("/api/statements/**").authenticated()
+                                .requestMatchers("/api/statements/**").hasRole("USER")
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
@@ -47,6 +48,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {

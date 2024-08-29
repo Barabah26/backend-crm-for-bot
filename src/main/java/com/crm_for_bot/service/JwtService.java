@@ -25,46 +25,46 @@ public class JwtService {
 
 
 
-    public JwtResponse getAccessToken(@NonNull String refreshToken) {
-        if (jwtProvider.validateRefreshToken(refreshToken)) {
-            final Claims claims = jwtProvider.getRefreshClaims(refreshToken);
-            final String username = claims.getSubject();
-            final String saveRefreshToken = refreshStorage.get(username);
-            if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-                final User user = userService.getByLogin(username)
-                        .orElseThrow(() -> new AuthException("User not found"));
-                final String accessToken = jwtProvider.generateAccessToken(user);
+//    public JwtResponse getAccessToken(@NonNull String refreshToken) {
+//        if (jwtProvider.validateRefreshToken(refreshToken)) {
+//            final Claims claims = jwtProvider.getRefreshClaims(refreshToken);
+//            final String username = claims.getSubject();
+//            final String saveRefreshToken = refreshStorage.get(username);
+//            if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
+//                final User user = userService.getByLogin(username)
+//                        .orElseThrow(() -> new AuthException("User not found"));
+//                final String accessToken = jwtProvider.generateAccessToken(user);
+//
+//                List<String> accessTokens = accessStorage.computeIfAbsent(username, k -> new ArrayList<>());
+//                accessTokens.add(accessToken);
+//                accessStorage.put(username, accessTokens);
+//                return new JwtResponse(accessToken, null);
+//            }
+//        }
+//        return new JwtResponse(null, null);
+//    }
 
-                List<String> accessTokens = accessStorage.computeIfAbsent(username, k -> new ArrayList<>());
-                accessTokens.add(accessToken);
-                accessStorage.put(username, accessTokens);
-                return new JwtResponse(accessToken, null);
-            }
-        }
-        return new JwtResponse(null, null);
-    }
-
-    public JwtResponse refresh(@NonNull String refreshToken) {
-        if (jwtProvider.validateRefreshToken(refreshToken)) {
-            final Claims claims = jwtProvider.getRefreshClaims(refreshToken);
-            final String username = claims.getSubject();
-            final String saveRefreshToken = refreshStorage.get(username);
-            if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-                final User user = userService.getByLogin(username)
-                        .orElseThrow(() -> new AuthException("User not found"));
-                final String accessToken = jwtProvider.generateAccessToken(user);
-                final String newRefreshToken = jwtProvider.generateRefreshToken(user);
-                refreshStorage.put(user.getUserName(), newRefreshToken);
-
-                List<String> accessTokens = accessStorage.computeIfAbsent(username, k -> new ArrayList<>());
-                accessTokens.add(accessToken);
-                accessStorage.put(username, accessTokens);
-
-                return new JwtResponse(accessToken, newRefreshToken);
-            }
-        }
-        throw new AuthException("JWT token is invalid");
-    }
+//    public JwtResponse refresh(@NonNull String refreshToken) {
+//        if (jwtProvider.validateRefreshToken(refreshToken)) {
+//            final Claims claims = jwtProvider.getRefreshClaims(refreshToken);
+//            final String username = claims.getSubject();
+//            final String saveRefreshToken = refreshStorage.get(username);
+//            if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
+//                final User user = userService.getByLogin(username)
+//                        .orElseThrow(() -> new AuthException("User not found"));
+//                final String accessToken = jwtProvider.generateAccessToken(user);
+//                final String newRefreshToken = jwtProvider.generateRefreshToken(user);
+//                refreshStorage.put(user.getUserName(), newRefreshToken);
+//
+//                List<String> accessTokens = accessStorage.computeIfAbsent(username, k -> new ArrayList<>());
+//                accessTokens.add(accessToken);
+//                accessStorage.put(username, accessTokens);
+//
+//                return new JwtResponse(accessToken, newRefreshToken);
+//            }
+//        }
+//        throw new AuthException("JWT token is invalid");
+//    }
 
     public boolean validateAccessToken(@NonNull String accessToken) {
       return jwtProvider.validateAccessToken(accessToken);

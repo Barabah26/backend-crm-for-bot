@@ -1,4 +1,4 @@
-package com.crm_for_bot.dao;
+package com.crm_for_bot.repository;
 
 import com.crm_for_bot.entity.StatementInfo;
 import org.springframework.data.jpa.repository.JpaRepository;

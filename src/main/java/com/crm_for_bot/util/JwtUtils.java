@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JwtUtils {
@@ -19,6 +20,13 @@ public class JwtUtils {
     public Long getUserIdFromToken(String token) {
         return Long.parseLong(getAllClaimsFromToken(token, accessTokenSecret).get("userId").toString());
     }
+
+    public List<String> getRolesFromToken(String token) {
+        Claims claims = getAllClaimsFromToken(token, accessTokenSecret);
+        return (List<String>) claims.get("roles");
+    }
+
+
 
     private Claims getAllClaimsFromToken(String token, String secret) {
         return Jwts.parser()

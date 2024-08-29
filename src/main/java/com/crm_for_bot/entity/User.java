@@ -1,5 +1,6 @@
 package com.crm_for_bot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,8 +28,22 @@ public class User {
     @Column(name = "encrypted_password", length = 128, nullable = false)
     private String encryptedPassword;
 
-    @Override public String toString() {
-        return "SysUser{" +
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @JsonIgnore
+    private Set<Role> roles = new HashSet<>();
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
                 ", encryptedPassword='" + encryptedPassword + '\'' +
