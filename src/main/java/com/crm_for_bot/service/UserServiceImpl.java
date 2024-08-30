@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
         Set<Role> roles = new HashSet<>();
         for (String roleName : userDto.getRoles()) {
             Role role = roleRepository.findByName(roleName)
-                    .orElseThrow(() -> new RuntimeException("Role not found"));
+                    .orElseThrow(() -> new RecourseNotFoundException("Role not found"));
             roles.add(role);
         }
         user.setRoles(roles);

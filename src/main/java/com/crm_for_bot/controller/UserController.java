@@ -2,6 +2,7 @@ package com.crm_for_bot.controller;
 
 import com.crm_for_bot.dto.UserDto;
 import com.crm_for_bot.entity.User;
+import com.crm_for_bot.exception.RecourseNotFoundException;
 import com.crm_for_bot.mapper.UserDtoMapper;
 import com.crm_for_bot.service.UserService;
 import com.crm_for_bot.service.UserServiceImpl;
@@ -30,12 +31,15 @@ public class UserController {
         try {
             UserDto registeredUser = userService.registerUser(userDto);
             return ResponseEntity.ok(registeredUser);
+        } catch (RecourseNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(409).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Internal server error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
+
 
 
     @PreAuthorize("hasRole('ADMIN')")
