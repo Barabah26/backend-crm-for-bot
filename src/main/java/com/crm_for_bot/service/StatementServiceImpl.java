@@ -33,7 +33,7 @@ public class StatementServiceImpl implements StatementService {
         dto.setGroupName((String) result[2]);
         dto.setPhoneNumber((String) result[3]);
         dto.setTypeOfStatement((String) result[4]);
-        dto.setInstitute((String) result[5]);
+        dto.setFaculty((String) result[5]);
         dto.setYearEntry((String) result[6]);
         return dto;
     }

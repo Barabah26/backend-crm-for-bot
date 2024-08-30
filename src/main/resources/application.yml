@@ -60,11 +60,11 @@ spring:
       on-profile: prod
   flyway:
     enabled: false
-  sql:
-    init:
-      mode: always
-      data-locations: classpath:data.sql
-      schema-locations: classpath:schema-postgres.sql
+#  sql:
+#    init:
+#      mode: always
+#      data-locations: classpath:data.sql
+#      schema-locations: classpath:schema-postgres.sql
   datasource:
     url: jdbc:postgresql://localhost:5432/crmDATA
     username: root
