@@ -34,6 +34,7 @@ CREATE TABLE roles (
                        name VARCHAR(50) NOT NULL
 );
 
+
 CREATE TABLE user_roles (
                             user_id BIGINT NOT NULL,
                             role_id BIGINT NOT NULL,

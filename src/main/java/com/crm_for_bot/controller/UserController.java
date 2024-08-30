@@ -54,13 +54,14 @@ public class UserController {
 
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+    @DeleteMapping("/deleteByUsername/{username}")
+    public ResponseEntity<?> deleteUserByUsername(@PathVariable String username) {
         try {
-            userService.deleteUserById(id);
+            userService.deleteUserByUsername(username);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
 }

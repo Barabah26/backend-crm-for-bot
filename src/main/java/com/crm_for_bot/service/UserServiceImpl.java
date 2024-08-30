@@ -13,17 +13,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserDtoMapper userDtoMapper;
     private final PasswordEncoder passwordEncoder;
-    private final RoleService roleService;
+    private final RoleRepository roleRepository;
 
     public Optional<User> getByLogin(@NonNull String login) {
         return userRepository.findUsersByUserName(login);
@@ -31,16 +33,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto registerUser(UserDto userDto) {
-        User user = userDtoMapper.convertToEntity(userDto);
-        user.setUserName(user.getUserName());
+        if (userRepository.findUsersByUserName(userDto.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("User already exists");
+        }
+
+
+        User user = new User();
+        user.setUserName(userDto.getUsername());
         user.setEncryptedPassword(passwordEncoder.encode(userDto.getPassword()));
-        Role role = roleService.findByName(userDto.getRoles().toString())
-                .orElseThrow(() -> new IllegalArgumentException("Role not found"));
-        user.addRole(role);
+
+        Set<Role> roles = new HashSet<>();
+        for (String roleName : userDto.getRoles()) {
+            Role role = roleRepository.findByName(roleName)
+                    .orElseThrow(() -> new RuntimeException("Role not found"));
+            roles.add(role);
+        }
+        user.setRoles(roles);
 
         User savedUser = userRepository.save(user);
 
-        return userDtoMapper.convertToDto(savedUser);
+        return new UserDto(savedUser.getUserName(), savedUser.getEncryptedPassword(),
+                savedUser.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
     }
 
 
@@ -50,12 +63,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUserById(Long id) {
-        if (userRepository.findById(id).isEmpty()){
-            throw new RecourseNotFoundException("User not found");
-        }
-
-        userRepository.deleteById(id);
+    public void deleteUserByUsername(String username) {
+        User user = userRepository.findUsersByUserName(username)
+                .orElseThrow(() -> new RecourseNotFoundException("User not found with username: " + username));
+        userRepository.delete(user);
     }
+
 
 }
