@@ -13,7 +13,6 @@ logging:
 
 
 ---
-
 spring:
   security:
     user:
