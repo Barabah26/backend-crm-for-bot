@@ -1,5 +1,6 @@
 package com.crm_for_bot.controller;
 
+import com.crm_for_bot.dto.UpdateUserDto;
 import com.crm_for_bot.dto.UserDto;
 import com.crm_for_bot.entity.User;
 import com.crm_for_bot.exception.RecourseNotFoundException;
@@ -65,6 +66,23 @@ public class UserController {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/updateByUsername/{username}")
+    public ResponseEntity<?> updateUserByUsername(@PathVariable String username, @RequestBody UpdateUserDto updateUserDto) {
+        try {
+            UpdateUserDto currentUser = userService.updateUserPassword(username, updateUserDto);
+            if (currentUser != null) {
+                return ResponseEntity.ok(currentUser);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with username " + username + " not found");
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with username " + username + " not found");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the user");
         }
     }
 

@@ -1,5 +1,6 @@
 package com.crm_for_bot.service;
 
+import com.crm_for_bot.dto.UpdateUserDto;
 import com.crm_for_bot.entity.Role;
 import com.crm_for_bot.repository.RoleRepository;
 import com.crm_for_bot.repository.UserRepository;
@@ -67,6 +68,20 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findUsersByUserName(username)
                 .orElseThrow(() -> new RecourseNotFoundException("User not found with username: " + username));
         userRepository.delete(user);
+    }
+
+    @Override
+    public UpdateUserDto updateUserPassword(String username, UpdateUserDto userDto) {
+        Optional<User> optionalUser = userRepository.findUsersByUserName(username);
+        if (optionalUser.isPresent()) {
+            User currentUser = optionalUser.get();
+            currentUser.setEncryptedPassword(passwordEncoder.encode(userDto.getNewPassword()));
+            userRepository.updateUserByUsername(username, passwordEncoder.encode(userDto.getNewPassword()));
+            return userDto;
+        } else {
+            throw new RecourseNotFoundException("User not found");
+        }
+
     }
 
 
