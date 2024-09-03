@@ -43,7 +43,6 @@ public class JwtProvider {
         final Instant accessExpirationInstant = now.plusHours(ACCESS_LEAVE_HOURS).atZone(ZoneId.systemDefault()).toInstant();
         final Date accessExpiration = Date.from(accessExpirationInstant);
 
-        // Отримання ролей користувача як список рядків
         List<String> roles = user.getRoles().stream()
                 .map(Role::getName)
                 .collect(Collectors.toList());
@@ -51,9 +50,9 @@ public class JwtProvider {
         return Jwts.builder()
                 .setSubject(user.getUserName())
                 .setExpiration(accessExpiration)
-                .signWith(jwtAccessSecret) // Переконайтесь, що jwtAccessSecret налаштований правильно
+                .signWith(jwtAccessSecret)
                 .claim("userId", user.getUserId())
-                .claim("roles", roles) // Додаємо ролі як claim
+                .claim("roles", roles)
                 .compact();
     }
 
