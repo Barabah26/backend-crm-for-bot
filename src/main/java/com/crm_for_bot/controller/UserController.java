@@ -7,6 +7,7 @@ import com.crm_for_bot.exception.RecourseNotFoundException;
 import com.crm_for_bot.mapper.UserDtoMapper;
 import com.crm_for_bot.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
+@Slf4j
 @RequestMapping("/api/admin")
 public class UserController {
 
@@ -72,7 +74,7 @@ public class UserController {
         try {
             UpdateUserDto currentUser = userService.updateUserPassword(username, updateUserDto);
             if (currentUser != null) {
-                return ResponseEntity.ok(currentUser);
+                return ResponseEntity.ok().build();
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with username " + username + " not found");
             }
@@ -82,5 +84,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the user");
         }
     }
+
 
 }

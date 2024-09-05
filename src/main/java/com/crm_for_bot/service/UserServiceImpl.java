@@ -7,10 +7,8 @@ import com.crm_for_bot.repository.UserRepository;
 import com.crm_for_bot.dto.UserDto;
 import com.crm_for_bot.entity.User;
 import com.crm_for_bot.exception.RecourseNotFoundException;
-import com.crm_for_bot.mapper.UserDtoMapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -81,8 +79,9 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new RecourseNotFoundException("User not found");
         }
-
     }
+
+
 
 
 }
