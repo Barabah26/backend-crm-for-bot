@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface StatementService {
     List<StatementDto> getStatementsInfoWithStatusFalse();
-
+    List<StatementDto> getStatementsInfoByFaculty(String faculty);
     void updateStatementStatus(Long statementId);
 }

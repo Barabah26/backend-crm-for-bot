@@ -6,6 +6,7 @@ import com.crm_for_bot.entity.StatementInfo;
 import com.crm_for_bot.exception.RecourseNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,16 @@ public class StatementServiceImpl implements StatementService {
     @Override
     public List<StatementDto> getStatementsInfoWithStatusFalse() {
         List<Object[]> results = statementRepository.findStatementsInfoWithStatusFalse();
+        if (results.isEmpty()) {
+            throw new RecourseNotFoundException("Statements are not found");
+        }
+
+        return results.stream().map(this::mapToStatementDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StatementDto> getStatementsInfoByFaculty(String faculty) {
+        List<Object[]> results = statementRepository.findStatementInfoByFaculty(faculty);
         if (results.isEmpty()) {
             throw new RecourseNotFoundException("Statements are not found");
         }

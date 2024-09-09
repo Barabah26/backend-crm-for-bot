@@ -21,6 +21,12 @@ public class StatementController {
         return ResponseEntity.ok(statements);
     }
 
+    @GetMapping("{faculty}")
+    public ResponseEntity<List<StatementDto>> getStatementsByFaculty(@PathVariable("faculty") String faculty) {
+        List<StatementDto> statements = statementService.getStatementsInfoByFaculty(faculty);
+        return ResponseEntity.ok(statements);
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity<String> updateStatementStatus(@PathVariable("id") Long statementId) {
         statementService.updateStatementStatus(statementId);
