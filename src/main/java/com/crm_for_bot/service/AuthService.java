@@ -32,7 +32,6 @@ public class AuthService {
         return accessTokens;
     }
 
-    // Assuming Role class has a method getRoleName()
     public JwtResponse login(@NonNull JwtRequest authRequest) {
         if (authRequest.getUsername() == null) {
             throw new AuthException("Username is null");
