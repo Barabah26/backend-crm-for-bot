@@ -16,15 +16,32 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for handling user management operations.
+ * Provides endpoints for registering, retrieving, updating, and deleting users.
+ */
 @AllArgsConstructor
 @RestController
 @Slf4j
 @RequestMapping("/api/admin")
 public class UserController {
 
+    /**
+     * Service for handling user operations.
+     */
     private final UserService userService;
+
+    /**
+     * Mapper for converting User entities to UserDto objects.
+     */
     private final UserDtoMapper userDtoMapper;
 
+    /**
+     * Registers a new user.
+     *
+     * @param userDto the user information to register.
+     * @return ResponseEntity<?> - the response containing the registered user details or error messages.
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserDto userDto) {
@@ -45,6 +62,11 @@ public class UserController {
         }
     }
 
+    /**
+     * Retrieves all users.
+     *
+     * @return ResponseEntity<List<UserDto>> - the response containing a list of all users.
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/allUsers")
     public ResponseEntity<List<UserDto>> getUser() {
@@ -62,6 +84,12 @@ public class UserController {
         }
     }
 
+    /**
+     * Deletes a user by username.
+     *
+     * @param username the username of the user to delete.
+     * @return ResponseEntity<?> - the response indicating the result of the deletion operation.
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/deleteByUsername/{username}")
     public ResponseEntity<?> deleteUserByUsername(@PathVariable String username) {
@@ -76,6 +104,13 @@ public class UserController {
         }
     }
 
+    /**
+     * Updates a user's password by username.
+     *
+     * @param username the username of the user to update.
+     * @param updateUserDto the updated user information.
+     * @return ResponseEntity<?> - the response indicating the result of the update operation.
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/updateByUsername/{username}")
     public ResponseEntity<?> updateUserByUsername(@PathVariable String username, @RequestBody UpdateUserDto updateUserDto) {

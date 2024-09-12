@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+/**
+ * Service class for handling JWT token operations such as validation, decoding, and checking expiration.
+ */
 @Service
 @RequiredArgsConstructor
 @Getter
@@ -23,59 +26,34 @@ public class JwtService {
     private final Map<String, List<String>> accessStorage = new HashMap<>();
     private final JwtProvider jwtProvider;
 
-
-
-//    public JwtResponse getAccessToken(@NonNull String refreshToken) {
-//        if (jwtProvider.validateRefreshToken(refreshToken)) {
-//            final Claims claims = jwtProvider.getRefreshClaims(refreshToken);
-//            final String username = claims.getSubject();
-//            final String saveRefreshToken = refreshStorage.get(username);
-//            if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-//                final User user = userService.getByLogin(username)
-//                        .orElseThrow(() -> new AuthException("User not found"));
-//                final String accessToken = jwtProvider.generateAccessToken(user);
-//
-//                List<String> accessTokens = accessStorage.computeIfAbsent(username, k -> new ArrayList<>());
-//                accessTokens.add(accessToken);
-//                accessStorage.put(username, accessTokens);
-//                return new JwtResponse(accessToken, null);
-//            }
-//        }
-//        return new JwtResponse(null, null);
-//    }
-
-//    public JwtResponse refresh(@NonNull String refreshToken) {
-//        if (jwtProvider.validateRefreshToken(refreshToken)) {
-//            final Claims claims = jwtProvider.getRefreshClaims(refreshToken);
-//            final String username = claims.getSubject();
-//            final String saveRefreshToken = refreshStorage.get(username);
-//            if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-//                final User user = userService.getByLogin(username)
-//                        .orElseThrow(() -> new AuthException("User not found"));
-//                final String accessToken = jwtProvider.generateAccessToken(user);
-//                final String newRefreshToken = jwtProvider.generateRefreshToken(user);
-//                refreshStorage.put(user.getUserName(), newRefreshToken);
-//
-//                List<String> accessTokens = accessStorage.computeIfAbsent(username, k -> new ArrayList<>());
-//                accessTokens.add(accessToken);
-//                accessStorage.put(username, accessTokens);
-//
-//                return new JwtResponse(accessToken, newRefreshToken);
-//            }
-//        }
-//        throw new AuthException("JWT token is invalid");
-//    }
-
+    /**
+     * Validates an access token using JwtProvider.
+     *
+     * @param accessToken the access token to be validated
+     * @return true if the token is valid, false otherwise
+     */
     public boolean validateAccessToken(@NonNull String accessToken) {
-      return jwtProvider.validateAccessToken(accessToken);
+        return jwtProvider.validateAccessToken(accessToken);
     }
 
+    /**
+     * Validates a refresh token using JwtProvider.
+     *
+     * @param refreshToken the refresh token to be validated
+     * @return true if the token is valid, false otherwise
+     */
     public boolean validateRefreshToken(@NonNull String refreshToken) {
         return jwtProvider.validateRefreshToken(refreshToken);
     }
 
+    /**
+     * Decodes a JWT token to retrieve its header and payload.
+     *
+     * @param token the token to be decoded
+     * @return a string containing the header and payload of the token
+     * @throws AuthException if the token is invalid
+     */
     public String decodeToken(@NonNull String token) {
-
         if (jwtProvider.validateAccessToken(token)) {
             String[] chunks = token.split("\\.");
 
@@ -88,18 +66,17 @@ public class JwtService {
         } else {
             throw new AuthException("JWT token is invalid");
         }
-
     }
 
-    public boolean isJwtExpired (String token) {
-            DecodedJWT decodedJWT = JWT.decode(token);
-            Date expiresAt = decodedJWT.getExpiresAt();
-            return expiresAt.before(new Date());
+    /**
+     * Checks if a JWT token has expired.
+     *
+     * @param token the token to be checked
+     * @return true if the token is expired, false otherwise
+     */
+    public boolean isJwtExpired(@NonNull String token) {
+        DecodedJWT decodedJWT = JWT.decode(token);
+        Date expiresAt = decodedJWT.getExpiresAt();
+        return expiresAt.before(new Date());
     }
-
-
-
-
-
-
 }

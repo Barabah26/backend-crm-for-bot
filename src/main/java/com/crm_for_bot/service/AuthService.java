@@ -10,14 +10,14 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.security.core.GrantedAuthority;
-
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Service class for handling authentication-related operations such as user login, token management, and token revocation.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -27,11 +27,23 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
+    /**
+     * Retrieves the list of access tokens for a given username.
+     *
+     * @param userName the username to retrieve access tokens for
+     * @return a list of access tokens associated with the given username
+     */
     public List<String> getTokensByUser(String userName) {
-        List<String> accessTokens = jwtService.getAccessStorage().get(userName);
-        return accessTokens;
+        return jwtService.getAccessStorage().get(userName);
     }
 
+    /**
+     * Handles user login by validating credentials and generating JWT tokens.
+     *
+     * @param authRequest the authentication request containing username and password
+     * @return a {@link JwtResponse} containing access token, refresh token, and user role
+     * @throws AuthException if the username is null or the user is not found, or the password is incorrect
+     */
     public JwtResponse login(@NonNull JwtRequest authRequest) {
         if (authRequest.getUsername() == null) {
             throw new AuthException("Username is null");
@@ -48,9 +60,8 @@ public class AuthService {
             accessTokens.add(accessToken);
             jwtService.getAccessStorage().put(user.getUserName(), accessTokens);
 
-            // Extract role from the user object assuming roles are of type Role
             String role = user.getRoles().stream()
-                    .map(Role::getName) // Adjust this to match your Role class method
+                    .map(Role::getName)
                     .findFirst()
                     .orElse("USER");
 
@@ -60,7 +71,12 @@ public class AuthService {
         }
     }
 
-
+    /**
+     * Revokes a given access token by removing it from the storage.
+     *
+     * @param accessToken the access token to be revoked
+     * @return true if the token was successfully revoked, false otherwise
+     */
     public boolean revokeToken(@NonNull String accessToken) {
         if (jwtProvider.validateAccessToken(accessToken)) {
             final Claims claims = jwtProvider.getAccessClaims(accessToken);

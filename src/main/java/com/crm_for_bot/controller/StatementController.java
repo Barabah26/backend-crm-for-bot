@@ -10,14 +10,26 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller for handling endpoints related to statements.
+ * Provides methods for retrieving all statements, retrieving statements by faculty, and updating statement status.
+ */
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/statements")
 @Slf4j
 public class StatementController {
 
+    /**
+     * Service for handling statement operations.
+     */
     private final StatementService statementService;
 
+    /**
+     * Retrieves all statements with a status of false.
+     *
+     * @return ResponseEntity<List<StatementDto>> - the response containing a list of statements with status false, or no content if none found.
+     */
     @GetMapping
     public ResponseEntity<List<StatementDto>> getAllStatements() {
         log.info("Fetching all statements with status false");
@@ -30,6 +42,12 @@ public class StatementController {
         return ResponseEntity.ok(statements);
     }
 
+    /**
+     * Retrieves statements for a specific faculty.
+     *
+     * @param faculty the faculty name to filter the statements.
+     * @return ResponseEntity<List<StatementDto>> - the response containing a list of statements for the given faculty, or no content if none found.
+     */
     @GetMapping("{faculty}")
     public ResponseEntity<List<StatementDto>> getStatementsByFaculty(@PathVariable("faculty") String faculty) {
         log.info("Fetching statements for faculty: {}", faculty);
@@ -50,6 +68,12 @@ public class StatementController {
         return ResponseEntity.ok(statements);
     }
 
+    /**
+     * Updates the status of a statement based on its ID.
+     *
+     * @param statementId the ID of the statement to update.
+     * @return ResponseEntity<String> - the response indicating the result of the update operation.
+     */
     @DeleteMapping("{id}")
     public ResponseEntity<String> updateStatementStatus(@PathVariable("id") Long statementId) {
         log.info("Updating statement status for statement ID: {}", statementId);

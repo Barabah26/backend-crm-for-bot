@@ -1,12 +1,12 @@
 package com.crm_for_bot.service;
 
 import com.crm_for_bot.dto.UpdateUserDto;
-import com.crm_for_bot.entity.Role;
-import com.crm_for_bot.repository.RoleRepository;
-import com.crm_for_bot.repository.UserRepository;
 import com.crm_for_bot.dto.UserDto;
+import com.crm_for_bot.entity.Role;
 import com.crm_for_bot.entity.User;
 import com.crm_for_bot.exception.RecourseNotFoundException;
+import com.crm_for_bot.repository.RoleRepository;
+import com.crm_for_bot.repository.UserRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +18,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of the UserService interface.
+ */
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -26,6 +29,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
+    @Override
     public Optional<User> getByLogin(@NonNull String login) {
         return userRepository.findUsersByUserName(login);
     }
@@ -35,7 +39,6 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findUsersByUserName(userDto.getUsername()).isPresent()) {
             throw new IllegalArgumentException("User already exists");
         }
-
 
         User user = new User();
         user.setUserName(userDto.getUsername());
@@ -54,7 +57,6 @@ public class UserServiceImpl implements UserService {
         return new UserDto(savedUser.getUserName(), savedUser.getEncryptedPassword(),
                 savedUser.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
     }
-
 
     @Override
     public List<User> getAllUsers() {
@@ -80,8 +82,4 @@ public class UserServiceImpl implements UserService {
             throw new RecourseNotFoundException("User not found");
         }
     }
-
-
-
-
 }

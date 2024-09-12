@@ -8,14 +8,27 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller for handling authentication-related endpoints.
+ * Provides methods for user login and token revocation.
+ */
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Slf4j
 public class AuthController {
 
+    /**
+     * Service for handling authentication operations.
+     */
     private final AuthService authService;
 
+    /**
+     * Handles user login requests.
+     *
+     * @param authRequest the request payload containing username and password.
+     * @return ResponseEntity<JwtResponse> - the response containing the JWT token if login is successful.
+     */
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest authRequest) {
         log.info("Attempting login for user: {}", authRequest.getUsername());
@@ -29,6 +42,12 @@ public class AuthController {
         }
     }
 
+    /**
+     * Handles token revocation requests.
+     *
+     * @param accessToken the token to be revoked.
+     * @return ResponseEntity<?> - the response indicating whether the token revocation was successful or not.
+     */
     @PostMapping("/revoke")
     public ResponseEntity<?> revokeToken(@RequestParam String accessToken) {
         log.info("Attempting to revoke token");

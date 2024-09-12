@@ -5,7 +5,6 @@ import com.crm_for_bot.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,17 +19,25 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Component for generating and validating JWT tokens.
+ */
 @Slf4j
 @Component
-
 public class JwtProvider {
 
-    public static final int ACCESS_LEAVE_MINUTES = 30   ;
+    public static final int ACCESS_LEAVE_MINUTES = 30;
     public static final int ACCESS_LEAVE_HOURS = 24;
     public static final int REFRESH_LEAVE_DAYS = 30;
     private final SecretKey jwtAccessSecret;
     private final SecretKey jwtRefreshSecret;
 
+    /**
+     * Constructor to initialize JwtProvider with secret keys for access and refresh tokens.
+     *
+     * @param jwtAccessSecret the secret key for access tokens
+     * @param jwtRefreshSecret the secret key for refresh tokens
+     */
     public JwtProvider(
             @Value("${jwt.secret.access}") String jwtAccessSecret,
             @Value("${jwt.secret.refresh}") String jwtRefreshSecret) {
@@ -38,9 +45,15 @@ public class JwtProvider {
         this.jwtRefreshSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtRefreshSecret));
     }
 
+    /**
+     * Generates an access token for a given user.
+     *
+     * @param user the user for whom the access token is generated
+     * @return the generated access token
+     */
     public String generateAccessToken(@NonNull User user) {
         final LocalDateTime now = LocalDateTime.now();
-        final Instant accessExpirationInstant = now.plusHours(ACCESS_LEAVE_HOURS).atZone(ZoneId.systemDefault()).toInstant();
+        final Instant accessExpirationInstant = now.plusHours(ACCESS_LEAVE_MINUTES).atZone(ZoneId.systemDefault()).toInstant();
         final Date accessExpiration = Date.from(accessExpirationInstant);
 
         List<String> roles = user.getRoles().stream()
@@ -56,8 +69,12 @@ public class JwtProvider {
                 .compact();
     }
 
-
-
+    /**
+     * Generates a refresh token for a given user.
+     *
+     * @param user the user for whom the refresh token is generated
+     * @return the generated refresh token
+     */
     public String generateRefreshToken(@NonNull User user) {
         final LocalDateTime now = LocalDateTime.now();
         final Instant refreshExpirationInstant = now.plusDays(REFRESH_LEAVE_DAYS).atZone(ZoneId.systemDefault()).toInstant();
@@ -85,23 +102,47 @@ public class JwtProvider {
         } catch (SignatureException sEx) {
             log.error("Invalid signature", sEx);
         } catch (Exception e) {
-            log.error("invalid token", e);
+            log.error("Invalid token", e);
         }
         return false;
     }
 
+    /**
+     * Validates an access token.
+     *
+     * @param accessToken the access token to be validated
+     * @return true if the token is valid, false otherwise
+     */
     public boolean validateAccessToken(@NonNull String accessToken) {
         return validateToken(accessToken, jwtAccessSecret);
     }
 
+    /**
+     * Validates a refresh token.
+     *
+     * @param refreshToken the refresh token to be validated
+     * @return true if the token is valid, false otherwise
+     */
     public boolean validateRefreshToken(@NonNull String refreshToken) {
         return validateToken(refreshToken, jwtRefreshSecret);
     }
 
+    /**
+     * Extracts claims from an access token.
+     *
+     * @param token the access token from which claims are extracted
+     * @return the claims extracted from the token
+     */
     public Claims getAccessClaims(@NonNull String token) {
         return getClaims(token, jwtAccessSecret);
     }
 
+    /**
+     * Extracts claims from a refresh token.
+     *
+     * @param token the refresh token from which claims are extracted
+     * @return the claims extracted from the token
+     */
     public Claims getRefreshClaims(@NonNull String token) {
         return getClaims(token, jwtRefreshSecret);
     }
@@ -113,5 +154,4 @@ public class JwtProvider {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
 }

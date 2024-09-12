@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+/**
+ * Entity representing information related to statements in the application.
+ * This class holds details about the readiness and status of statements.
+ */
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,14 +18,25 @@ import lombok.Setter;
 @Table(name = "statement_info")
 public class StatementInfo {
 
+    /**
+     * The unique identifier for the statement info.
+     * This field is used as the primary key and must be unique.
+     */
     @Id
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
+    /**
+     * Indicates whether the statement is ready.
+     * This field is used to track the readiness status of the statement.
+     */
     @Column(name = "is_ready")
     private Boolean isReady;
 
+    /**
+     * The status of the statement.
+     * This field is a boolean that represents the current status of the statement.
+     */
     @Column(name = "status")
     private boolean status;
 }
-

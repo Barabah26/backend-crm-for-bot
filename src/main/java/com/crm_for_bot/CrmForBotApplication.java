@@ -15,20 +15,38 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 
+/**
+ * The main entry point for the CRM For Bot Spring Boot application.
+ */
 @SpringBootApplication
 public class CrmForBotApplication {
 
+    /**
+     * The main method to start the Spring Boot application.
+     *
+     * @param args command-line arguments
+     */
     public static void main(String[] args) {
         SpringApplication.run(CrmForBotApplication.class, args);
         System.out.println("http://localhost:9000/swagger-ui/index.html");
         System.out.println("http://localhost:9000/h2-console");
     }
 
+    /**
+     * Bean configuration for PasswordEncoder using BCrypt.
+     *
+     * @return a BCryptPasswordEncoder instance
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Bean configuration for OpenAPI documentation using SpringDoc.
+     *
+     * @return an OpenAPI instance with API documentation settings
+     */
     @Bean
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
@@ -45,5 +63,4 @@ public class CrmForBotApplication {
                 .addSecurityItem(
                         new SecurityRequirement().addList("bearer-jwt", Arrays.asList("read", "write")));
     }
-
 }

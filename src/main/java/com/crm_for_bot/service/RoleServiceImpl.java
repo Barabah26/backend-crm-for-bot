@@ -6,18 +6,22 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.Set;
 
+/**
+ * Implementation of the RoleService interface.
+ */
 @Service
 @AllArgsConstructor
-public class RoleServiceImpl implements RoleService{
+public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
 
+    @Override
     public Optional<Role> findByName(String name) {
         return roleRepository.findByName(name);
     }
 
+    @Override
     public Role save(Role role) {
         return roleRepository.save(role);
     }

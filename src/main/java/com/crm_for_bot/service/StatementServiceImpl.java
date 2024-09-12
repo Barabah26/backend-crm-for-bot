@@ -1,16 +1,18 @@
 package com.crm_for_bot.service;
 
-import com.crm_for_bot.repository.StatementRepository;
 import com.crm_for_bot.dto.StatementDto;
 import com.crm_for_bot.entity.StatementInfo;
 import com.crm_for_bot.exception.RecourseNotFoundException;
+import com.crm_for_bot.repository.StatementRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of the StatementService interface.
+ */
 @Service
 @AllArgsConstructor
 public class StatementServiceImpl implements StatementService {
@@ -58,4 +60,3 @@ public class StatementServiceImpl implements StatementService {
         statementRepository.save(statement);
     }
 }
-
