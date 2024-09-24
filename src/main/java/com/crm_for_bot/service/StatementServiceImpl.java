@@ -4,6 +4,7 @@ import com.crm_for_bot.dto.StatementDto;
 import com.crm_for_bot.entity.StatementInfo;
 import com.crm_for_bot.exception.RecourseNotFoundException;
 import com.crm_for_bot.repository.StatementRepository;
+import com.crm_for_bot.util.StatementStatus;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -52,11 +53,11 @@ public class StatementServiceImpl implements StatementService {
     }
 
     @Override
-    public void updateStatementStatus(Long statementId) {
+    public void updateStatementStatus(Long statementId, StatementStatus status) {
         StatementInfo statement = statementRepository.findById(statementId).orElseThrow(
                 () -> new RecourseNotFoundException("Statement is not found with id: " + statementId)
         );
-        statement.setStatus(true);
+        statement.setApplicationStatus(status.name());
         statementRepository.save(statement);
     }
 }

@@ -39,4 +39,13 @@ public class StatementInfo {
      */
     @Column(name = "status")
     private boolean status;
+
+    /**
+     * The current application status of the statement.
+     * This field represents the process status (e.g., "IN_PROGRESS", "COMPLETED", "PENDING").
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "application_status")
+    private String applicationStatus;
+
 }

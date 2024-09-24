@@ -7,9 +7,7 @@ DROP TABLE IF EXISTS statements_info;
 CREATE TABLE statements_info (
                                  id BIGINT NOT NULL UNIQUE,
                                  is_ready BOOLEAN,
-                                 status BOOLEAN,
-                                 creation_date TIMESTAMP NULL,
-                                 last_modified_date TIMESTAMP NULL
+                                 status BOOLEAN
 );
 
 CREATE TABLE statements (
@@ -17,7 +15,7 @@ CREATE TABLE statements (
                             full_name VARCHAR(255),
                             group_name VARCHAR(255),
                             phone_number VARCHAR(20),
-                            institute TEXT,
+                            faculty TEXT,
                             type_of_statement TEXT,
                             telegram_id BIGINT,
                             year_entry VARCHAR(10)

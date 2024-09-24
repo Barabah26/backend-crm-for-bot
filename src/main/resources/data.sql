@@ -1,4 +1,4 @@
-INSERT INTO statement (full_name, group_name, phone_number, institute, type_of_statement, telegram_id, year_entry) VALUES
+INSERT INTO statements (full_name, group_name, phone_number, faculty, type_of_statement, telegram_id, year_entry) VALUES
                                                                                                                         ('Барабах Павло Романович', 'КН43с', '+380987654321', 'Інститут комп’ютерних наук', 'Довідка з місця навчання', 1234567890, '2021'),
                                                                                                                         ('Кмита Сергій Володимирович', 'КН43с', '+380987654321', 'Інститут комп’ютерних наук', 'Довідка з місця навчання', 1234567890, '2021'),
                                                                                                                         ('Петренко Іван Васильович', 'КН43с', '+380987654322', 'Інститут комп’ютерних наук', 'Довідка для військкомату', 1234567891, '2021'),
@@ -13,7 +13,7 @@ INSERT INTO statement (full_name, group_name, phone_number, institute, type_of_s
                                                                                                                         ('Павленко Ірина Василівна', 'КН43с', '+380987654331', 'Інститут комп’ютерних наук', 'Довідка з місця навчання', 1234567800, '2021'),
                                                                                                                         ('Романенко Юлія Іванівна', 'КН43с', '+380987654332', 'Інститут комп’ютерних наук', 'Довідка з місця навчання', 1234567801, '2021');
 
-INSERT INTO statement_info (id, is_ready, status) VALUES
+INSERT INTO statements_info (id, is_ready, status) VALUES
                                                                  (1, FALSE, FALSE),
                                                                  (2, FALSE, FALSE),
                                                                  (3, FALSE, FALSE),

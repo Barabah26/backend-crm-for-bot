@@ -1,6 +1,7 @@
 package com.crm_for_bot.service;
 
 import com.crm_for_bot.dto.StatementDto;
+import com.crm_for_bot.util.StatementStatus;
 
 import java.util.List;
 
@@ -29,5 +30,5 @@ public interface StatementService {
      *
      * @param statementId the ID of the statement to update
      */
-    void updateStatementStatus(Long statementId);
+    void updateStatementStatus(Long statementId, StatementStatus status);
 }
