@@ -1,5 +1,6 @@
 package com.crm_for_bot.entity;
 
+import com.crm_for_bot.util.StatementStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,10 +43,18 @@ public class StatementInfo {
 
     /**
      * The current application status of the statement.
-     * This field represents the process status (e.g., "IN_PROGRESS", "COMPLETED", "PENDING").
+     * This field represents the process status (e.g., "IN_PROGRESS", "COMPLETED").
      */
     @Enumerated(EnumType.STRING)
     @Column(name = "application_status")
-    private String applicationStatus;
+    private StatementStatus applicationStatus;
+
+    public StatementStatus getApplicationStatus() {
+        return applicationStatus;
+    }
+
+    public void setApplicationStatus(StatementStatus applicationStatus) {
+        this.applicationStatus = applicationStatus;
+    }
 
 }

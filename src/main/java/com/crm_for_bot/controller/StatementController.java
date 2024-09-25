@@ -3,6 +3,7 @@ package com.crm_for_bot.controller;
 import com.crm_for_bot.dto.StatementDto;
 import com.crm_for_bot.exception.RecourseNotFoundException;
 import com.crm_for_bot.service.StatementService;
+import com.crm_for_bot.util.StatementStatus;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +49,7 @@ public class StatementController {
      * @param faculty the faculty name to filter the statements.
      * @return ResponseEntity<List<StatementDto>> - the response containing a list of statements for the given faculty, or no content if none found.
      */
-    @GetMapping("{faculty}")
+    @GetMapping("faculty/{faculty}")
     public ResponseEntity<List<StatementDto>> getStatementsByFaculty(@PathVariable("faculty") String faculty) {
         log.info("Fetching statements for faculty: {}", faculty);
         List<StatementDto> statements;
@@ -74,11 +75,11 @@ public class StatementController {
      * @param statementId the ID of the statement to update.
      * @return ResponseEntity<String> - the response indicating the result of the update operation.
      */
-    @DeleteMapping("{id}")
-    public ResponseEntity<String> updateStatementStatus(@PathVariable("id") Long statementId) {
+    @PutMapping("{id}")
+    public ResponseEntity<String> updateStatementStatus(@PathVariable("id") Long statementId, @RequestBody StatementStatus status) {
         log.info("Updating statement status for statement ID: {}", statementId);
         try {
-            statementService.updateStatementStatus(statementId);
+            statementService.updateStatementStatus(statementId, status);
         } catch (RecourseNotFoundException e) {
             log.error("Statement with ID {} not found", statementId, e);
             return ResponseEntity.status(404).body("Statement not found!");
@@ -88,5 +89,30 @@ public class StatementController {
         }
         log.info("Statement status updated successfully for ID: {}", statementId);
         return ResponseEntity.ok("Statement status updated successfully!");
+    }
+
+    @GetMapping("status/{status}")
+    public ResponseEntity<List<StatementDto>> getStatementsByStatus(@PathVariable("status") String statusStr) {
+        StatementStatus status;
+        try {
+            status = StatementStatus.valueOf(statusStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid status provided: {}", statusStr, e);
+            return ResponseEntity.badRequest().build();
+        }
+
+        log.info("Fetching statements of status: {}", status.name());
+        List<StatementDto> statements;
+
+        statements = statementService.getStatementsInfoByStatus(status);
+
+        if (statements.isEmpty()) {
+            log.warn("No statements found of status: {}", status.name());
+            return ResponseEntity.noContent().build();
+        }
+
+        log.info("Retrieved {} statements of status: {}", statements.size(), status.name());
+        return ResponseEntity.ok(statements);
+
     }
 }

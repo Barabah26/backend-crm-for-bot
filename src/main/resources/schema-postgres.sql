@@ -1,16 +1,17 @@
 DROP TABLE IF EXISTS user_roles CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS roles;
-DROP TABLE IF EXISTS statements;
-DROP TABLE IF EXISTS statements_info;
+DROP TABLE IF EXISTS statement;
+DROP TABLE IF EXISTS statement_info;
 
-CREATE TABLE statements_info (
+CREATE TABLE statement_info (
                                  id BIGINT NOT NULL UNIQUE,
                                  is_ready BOOLEAN,
-                                 status BOOLEAN
+                                 status BOOLEAN,
+                                 application_status VARCHAR(255)
 );
 
-CREATE TABLE statements (
+CREATE TABLE statement (
                             id BIGSERIAL PRIMARY KEY,
                             full_name VARCHAR(255),
                             group_name VARCHAR(255),

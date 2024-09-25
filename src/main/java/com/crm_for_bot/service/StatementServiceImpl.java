@@ -57,7 +57,21 @@ public class StatementServiceImpl implements StatementService {
         StatementInfo statement = statementRepository.findById(statementId).orElseThrow(
                 () -> new RecourseNotFoundException("Statement is not found with id: " + statementId)
         );
-        statement.setApplicationStatus(status.name());
+        statement.setApplicationStatus(StatementStatus.valueOf(status.name()));
+        if (status == StatementStatus.READY) {
+            statement.setStatus(true);
+        }
+
         statementRepository.save(statement);
+    }
+
+    @Override
+    public List<StatementDto> getStatementsInfoByStatus(StatementStatus status) {
+        List<Object[]> results = statementRepository.findStatementInfoByStatus(status.name());
+        if (results.isEmpty()) {
+            throw new RecourseNotFoundException("Statements are not found");
+        }
+
+        return results.stream().map(this::mapToStatementDto).collect(Collectors.toList());
     }
 }

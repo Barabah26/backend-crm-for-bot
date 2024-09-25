@@ -31,4 +31,6 @@ public interface StatementService {
      * @param statementId the ID of the statement to update
      */
     void updateStatementStatus(Long statementId, StatementStatus status);
+
+    List<StatementDto> getStatementsInfoByStatus(StatementStatus status);
 }
