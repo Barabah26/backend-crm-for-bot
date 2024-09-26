@@ -49,4 +49,7 @@ public class StatementDto {
      * The year in which the statement was made.
      */
     private String yearEntry;
+
+    private String status;
+
 }

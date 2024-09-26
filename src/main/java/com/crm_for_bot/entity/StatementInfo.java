@@ -35,13 +35,6 @@ public class StatementInfo {
     private Boolean isReady;
 
     /**
-     * The status of the statement.
-     * This field is a boolean that represents the current status of the statement.
-     */
-    @Column(name = "status")
-    private boolean status;
-
-    /**
      * The current application status of the statement.
      * This field represents the process status (e.g., "IN_PROGRESS", "COMPLETED").
      */
@@ -49,9 +42,9 @@ public class StatementInfo {
     @Column(name = "application_status")
     private StatementStatus applicationStatus;
 
-    public StatementStatus getApplicationStatus() {
-        return applicationStatus;
-    }
+//    public StatementStatus getApplicationStatus() {
+//        return applicationStatus;
+//    }
 
     public void setApplicationStatus(StatementStatus applicationStatus) {
         this.applicationStatus = applicationStatus;

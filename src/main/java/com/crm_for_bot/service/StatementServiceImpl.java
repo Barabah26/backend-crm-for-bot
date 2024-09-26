@@ -22,7 +22,7 @@ public class StatementServiceImpl implements StatementService {
 
     @Override
     public List<StatementDto> getStatementsInfoWithStatusFalse() {
-        List<Object[]> results = statementRepository.findStatementsInfoWithStatusFalse();
+        List<Object[]> results = statementRepository.findStatementsInfoWithStatusPending();
         if (results.isEmpty()) {
             throw new RecourseNotFoundException("Statements are not found");
         }
@@ -49,8 +49,20 @@ public class StatementServiceImpl implements StatementService {
         dto.setTypeOfStatement((String) result[4]);
         dto.setFaculty((String) result[5]);
         dto.setYearEntry((String) result[6]);
+
+        if (result[7] instanceof Boolean) {
+            dto.setStatus((Boolean) result[7] ? "Готово" : "Не готово");
+        } else if (result[7] instanceof String) {
+            dto.setStatus((String) result[7]);
+        } else {
+            dto.setStatus(null); // або обробка помилки
+        }
+
+
         return dto;
     }
+
+
 
     @Override
     public void updateStatementStatus(Long statementId, StatementStatus status) {
@@ -58,9 +70,6 @@ public class StatementServiceImpl implements StatementService {
                 () -> new RecourseNotFoundException("Statement is not found with id: " + statementId)
         );
         statement.setApplicationStatus(StatementStatus.valueOf(status.name()));
-        if (status == StatementStatus.READY) {
-            statement.setStatus(true);
-        }
 
         statementRepository.save(statement);
     }

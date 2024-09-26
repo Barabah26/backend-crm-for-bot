@@ -7,7 +7,6 @@ DROP TABLE IF EXISTS statement_info;
 CREATE TABLE statement_info (
                                  id BIGINT NOT NULL UNIQUE,
                                  is_ready BOOLEAN,
-                                 status BOOLEAN,
                                  application_status VARCHAR(255)
 );
 

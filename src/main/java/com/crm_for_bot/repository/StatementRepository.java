@@ -1,7 +1,6 @@
 package com.crm_for_bot.repository;
 
 import com.crm_for_bot.entity.StatementInfo;
-import com.crm_for_bot.util.StatementStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,9 +22,9 @@ public interface StatementRepository extends JpaRepository<StatementInfo, Long> 
     @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.is_ready " +
             "FROM statement_info si " +
             "JOIN statement s ON si.id = s.id " +
-            "WHERE si.status = false",
+            "WHERE si.application_status = 'PENDING'",
             nativeQuery = true)
-    List<Object[]> findStatementsInfoWithStatusFalse();
+    List<Object[]> findStatementsInfoWithStatusPending();
 
     /**
      * Retrieves statement information with a status of false, filtered by faculty.
@@ -36,14 +35,14 @@ public interface StatementRepository extends JpaRepository<StatementInfo, Long> 
     @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.is_ready " +
             "FROM statement_info si " +
             "JOIN statement s ON si.id = s.id " +
-            "WHERE si.status = false AND s.faculty = :faculty",
+            "WHERE s.faculty = :faculty",
             nativeQuery = true)
     List<Object[]> findStatementInfoByFaculty(@Param("faculty") String faculty);
 
     @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.is_ready " +
             "FROM statement_info si " +
             "JOIN statement s ON si.id = s.id " +
-            "WHERE si.status = false AND si.application_status = :status",
+            "WHERE si.application_status = :status",
             nativeQuery = true)
     List<Object[]> findStatementInfoByStatus(@Param("status") String status);
 

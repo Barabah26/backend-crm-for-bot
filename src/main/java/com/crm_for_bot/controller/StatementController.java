@@ -69,27 +69,27 @@ public class StatementController {
         return ResponseEntity.ok(statements);
     }
 
-    /**
-     * Updates the status of a statement based on its ID.
-     *
-     * @param statementId the ID of the statement to update.
-     * @return ResponseEntity<String> - the response indicating the result of the update operation.
-     */
-    @PutMapping("{id}")
-    public ResponseEntity<String> updateStatementStatus(@PathVariable("id") Long statementId, @RequestBody StatementStatus status) {
-        log.info("Updating statement status for statement ID: {}", statementId);
-        try {
-            statementService.updateStatementStatus(statementId, status);
-        } catch (RecourseNotFoundException e) {
-            log.error("Statement with ID {} not found", statementId, e);
-            return ResponseEntity.status(404).body("Statement not found!");
-        } catch (Exception e) {
-            log.error("Failed to update statement status for ID: {}", statementId, e);
-            return ResponseEntity.status(500).body("Failed to update statement status!");
-        }
-        log.info("Statement status updated successfully for ID: {}", statementId);
-        return ResponseEntity.ok("Statement status updated successfully!");
-    }
+//    /**
+//     * Updates the status of a statement based on its ID.
+//     *
+//     * @param statementId the ID of the statement to update.
+//     * @return ResponseEntity<String> - the response indicating the result of the update operation.
+//     */
+//    @PutMapping("{id}")
+//    public ResponseEntity<String> updateStatementStatus(@PathVariable("id") Long statementId, @RequestBody StatementStatus status) {
+//        log.info("Updating statement status for statement ID: {}", statementId);
+//        try {
+//            statementService.updateStatementStatus(statementId, status);
+//        } catch (RecourseNotFoundException e) {
+//            log.error("Statement with ID {} not found", statementId, e);
+//            return ResponseEntity.status(404).body("Statement not found!");
+//        } catch (Exception e) {
+//            log.error("Failed to update statement status for ID: {}", statementId, e);
+//            return ResponseEntity.status(500).body("Failed to update statement status!");
+//        }
+//        log.info("Statement status updated successfully for ID: {}", statementId);
+//        return ResponseEntity.ok("Statement status updated successfully!");
+//    }
 
     @GetMapping("status/{status}")
     public ResponseEntity<List<StatementDto>> getStatementsByStatus(@PathVariable("status") String statusStr) {
@@ -102,17 +102,60 @@ public class StatementController {
         }
 
         log.info("Fetching statements of status: {}", status.name());
-        List<StatementDto> statements;
-
-        statements = statementService.getStatementsInfoByStatus(status);
+        List<StatementDto> statements = statementService.getStatementsInfoByStatus(status);
+        log.info("Retrieved {} statements of status: {}", statements.size(), status.name()); // Лог для перевірки кількості
 
         if (statements.isEmpty()) {
             log.warn("No statements found of status: {}", status.name());
             return ResponseEntity.noContent().build();
         }
 
-        log.info("Retrieved {} statements of status: {}", statements.size(), status.name());
         return ResponseEntity.ok(statements);
-
     }
+
+    /**
+     * Marks a statement as "IN_PROGRESS" based on its ID.
+     *
+     * @param statementId the ID of the statement to update.
+     * @return ResponseEntity<String> - the response indicating the result of the update operation.
+     */
+    @PutMapping("{id}/in-progress")
+    public ResponseEntity<String> markStatementInProgress(@PathVariable("id") Long statementId) {
+        log.info("Marking statement ID: {} as IN_PROGRESS", statementId);
+        try {
+            statementService.updateStatementStatus(statementId, StatementStatus.IN_PROGRESS);
+        } catch (RecourseNotFoundException e) {
+            log.error("Statement with ID {} not found", statementId, e);
+            return ResponseEntity.status(404).body("Statement not found!");
+        } catch (Exception e) {
+            log.error("Failed to mark statement as IN_PROGRESS for ID: {}", statementId, e);
+            return ResponseEntity.status(500).body("Failed to update statement status!");
+        }
+        log.info("Statement ID: {} marked as IN_PROGRESS successfully", statementId);
+        return ResponseEntity.ok("Statement marked as IN_PROGRESS successfully!");
+    }
+
+    /**
+     * Marks a statement as "READY" based on its ID.
+     *
+     * @param statementId the ID of the statement to update.
+     * @return ResponseEntity<String> - the response indicating the result of the update operation.
+     */
+    @PutMapping("{id}/ready")
+    public ResponseEntity<String> markStatementReady(@PathVariable("id") Long statementId) {
+        log.info("Marking statement ID: {} as READY", statementId);
+        try {
+            statementService.updateStatementStatus(statementId, StatementStatus.READY);
+        } catch (RecourseNotFoundException e) {
+            log.error("Statement with ID {} not found", statementId, e);
+            return ResponseEntity.status(404).body("Statement not found!");
+        } catch (Exception e) {
+            log.error("Failed to mark statement as READY for ID: {}", statementId, e);
+            return ResponseEntity.status(500).body("Failed to update statement status!");
+        }
+        log.info("Statement ID: {} marked as READY successfully", statementId);
+        return ResponseEntity.ok("Statement marked as READY successfully!");
+    }
+
+
 }
