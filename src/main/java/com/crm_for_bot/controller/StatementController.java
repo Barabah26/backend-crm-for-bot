@@ -34,7 +34,7 @@ public class StatementController {
     @GetMapping
     public ResponseEntity<List<StatementDto>> getAllStatements() {
         log.info("Fetching all statements with status false");
-        List<StatementDto> statements = statementService.getStatementsInfoWithStatusFalse();
+        List<StatementDto> statements = statementService.getStatementsInfoWithStatusPending();
         if (statements.isEmpty()) {
             log.warn("No statements found with status false");
             return ResponseEntity.noContent().build();
@@ -68,29 +68,6 @@ public class StatementController {
         log.info("Retrieved {} statements for faculty: {}", statements.size(), faculty);
         return ResponseEntity.ok(statements);
     }
-
-//    /**
-//     * Updates the status of a statement based on its ID.
-//     *
-//     * @param statementId the ID of the statement to update.
-//     * @return ResponseEntity<String> - the response indicating the result of the update operation.
-//     */
-//    @PutMapping("{id}")
-//    public ResponseEntity<String> updateStatementStatus(@PathVariable("id") Long statementId, @RequestBody StatementStatus status) {
-//        log.info("Updating statement status for statement ID: {}", statementId);
-//        try {
-//            statementService.updateStatementStatus(statementId, status);
-//        } catch (RecourseNotFoundException e) {
-//            log.error("Statement with ID {} not found", statementId, e);
-//            return ResponseEntity.status(404).body("Statement not found!");
-//        } catch (Exception e) {
-//            log.error("Failed to update statement status for ID: {}", statementId, e);
-//            return ResponseEntity.status(500).body("Failed to update statement status!");
-//        }
-//        log.info("Statement status updated successfully for ID: {}", statementId);
-//        return ResponseEntity.ok("Statement status updated successfully!");
-//    }
-
     @GetMapping("status/{status}")
     public ResponseEntity<List<StatementDto>> getStatementsByStatus(@PathVariable("status") String statusStr) {
         StatementStatus status;
@@ -157,5 +134,26 @@ public class StatementController {
         return ResponseEntity.ok("Statement marked as READY successfully!");
     }
 
+        @GetMapping("/statusAndFaculty")
+        public ResponseEntity<List<StatementDto>> getStatementsByStatusAndFaculty(
+                @RequestParam(value = "status", required = false) StatementStatus status,
+                @RequestParam(value = "faculty", required = false) String faculty) {
+            log.info("Fetching statements for faculty: {}", faculty);
+            List<StatementDto> statements;
+            try {
+                statements = statementService.getStatementsInfoByStatusAndFaculty(status, faculty);
+            } catch (IllegalArgumentException e) {
+                log.error("Invalid faculty provided: {}", faculty, e);
+                return ResponseEntity.badRequest().body(null);
+            }
+
+            if (statements.isEmpty()) {
+                log.warn("No statements found for faculty: {}", faculty);
+                return ResponseEntity.notFound().build();
+            }
+
+            log.info("Retrieved {} statements for faculty: {}", statements.size(), faculty);
+            return ResponseEntity.ok(statements);
+        }
 
 }

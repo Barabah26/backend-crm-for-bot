@@ -42,10 +42,6 @@ public class StatementInfo {
     @Column(name = "application_status")
     private StatementStatus applicationStatus;
 
-//    public StatementStatus getApplicationStatus() {
-//        return applicationStatus;
-//    }
-
     public void setApplicationStatus(StatementStatus applicationStatus) {
         this.applicationStatus = applicationStatus;
     }

@@ -15,7 +15,7 @@ public interface StatementService {
      *
      * @return a list of StatementDto objects
      */
-    List<StatementDto> getStatementsInfoWithStatusFalse();
+    List<StatementDto> getStatementsInfoWithStatusPending();
 
     /**
      * Retrieves statements based on the faculty.
@@ -33,4 +33,6 @@ public interface StatementService {
     void updateStatementStatus(Long statementId, StatementStatus status);
 
     List<StatementDto> getStatementsInfoByStatus(StatementStatus status);
+
+    List<StatementDto> getStatementsInfoByStatusAndFaculty(StatementStatus status, String faculty);
 }

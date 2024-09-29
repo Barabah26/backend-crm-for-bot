@@ -50,6 +50,6 @@ public class StatementDto {
      */
     private String yearEntry;
 
-    private String status;
+    private String  status;
 
 }

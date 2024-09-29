@@ -21,7 +21,7 @@ public class StatementServiceImpl implements StatementService {
     private final StatementRepository statementRepository;
 
     @Override
-    public List<StatementDto> getStatementsInfoWithStatusFalse() {
+    public List<StatementDto> getStatementsInfoWithStatusPending() {
         List<Object[]> results = statementRepository.findStatementsInfoWithStatusPending();
         if (results.isEmpty()) {
             throw new RecourseNotFoundException("Statements are not found");
@@ -50,18 +50,26 @@ public class StatementServiceImpl implements StatementService {
         dto.setFaculty((String) result[5]);
         dto.setYearEntry((String) result[6]);
 
-        if (result[7] instanceof Boolean) {
-            dto.setStatus((Boolean) result[7] ? "Готово" : "Не готово");
-        } else if (result[7] instanceof String) {
-            dto.setStatus((String) result[7]);
-        } else {
-            dto.setStatus(null); // або обробка помилки
-        }
 
+        String statusString = (String) result[7];
+        StatementStatus status = StatementStatus.valueOf(statusString);
+        switch (status) {
+            case IN_PROGRESS:
+                dto.setStatus("В процесі");
+                break;
+            case READY:
+                dto.setStatus("Готово");
+                break;
+            case PENDING:
+                dto.setStatus("В очікуванні");
+                break;
+            default:
+                dto.setStatus("Невідомий статус");
+                break;
+        }
 
         return dto;
     }
-
 
 
     @Override
@@ -83,4 +91,15 @@ public class StatementServiceImpl implements StatementService {
 
         return results.stream().map(this::mapToStatementDto).collect(Collectors.toList());
     }
+
+    @Override
+    public List<StatementDto> getStatementsInfoByStatusAndFaculty(StatementStatus status, String faculty) {
+        List<Object[]> results = statementRepository.findStatementInfoByStatusAndFaculty(status.name(), faculty); // Use status.name() to get the string value
+        if (results.isEmpty()) {
+            throw new RecourseNotFoundException("Statements are not found");
+        }
+
+        return results.stream().map(this::mapToStatementDto).collect(Collectors.toList());
+    }
+
 }
