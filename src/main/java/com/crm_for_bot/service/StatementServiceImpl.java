@@ -104,7 +104,7 @@ public class StatementServiceImpl implements StatementService {
     public void deleteStatementIfReady(Long statementId, StatementStatus status, String faculty) {
         List<Object[]> results = statementRepository.findStatementInfoByStatusAndFaculty(status.name(), faculty);
         if (!results.isEmpty()){
-            statementRepository.deleteStatementIfReady(status.name(), statementId, status.name());
+            statementRepository.deleteStatementIfReady(status.name(), statementId, faculty);
         } else {
             throw new RecourseNotFoundException("Statements are not found");
         }
