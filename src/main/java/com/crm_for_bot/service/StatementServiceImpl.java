@@ -7,6 +7,7 @@ import com.crm_for_bot.repository.StatementRepository;
 import com.crm_for_bot.util.StatementStatus;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -96,6 +97,17 @@ public class StatementServiceImpl implements StatementService {
     public List<StatementDto> getStatementsInfoByStatusAndFaculty(StatementStatus status, String faculty) {
         List<Object[]> results = statementRepository.findStatementInfoByStatusAndFaculty(status.name(), faculty);
         return results.stream().map(this::mapToStatementDto).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void deleteStatementIfReady(Long statementId, StatementStatus status, String faculty) {
+        List<Object[]> results = statementRepository.findStatementInfoByStatusAndFaculty(status.name(), faculty);
+        if (!results.isEmpty()){
+            statementRepository.deleteStatementIfReady(status.name(), statementId, status.name());
+        } else {
+            throw new RecourseNotFoundException("Statements are not found");
+        }
     }
 
 }

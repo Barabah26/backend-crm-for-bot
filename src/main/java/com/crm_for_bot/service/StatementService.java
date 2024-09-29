@@ -35,4 +35,6 @@ public interface StatementService {
     List<StatementDto> getStatementsInfoByStatus(StatementStatus status);
 
     List<StatementDto> getStatementsInfoByStatusAndFaculty(StatementStatus status, String faculty);
+
+    void deleteStatementIfReady(Long statementId, StatementStatus status, String faculty);
 }
