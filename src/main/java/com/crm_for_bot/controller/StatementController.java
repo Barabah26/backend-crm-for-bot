@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -80,7 +82,7 @@ public class StatementController {
 
         log.info("Fetching statements of status: {}", status.name());
         List<StatementDto> statements = statementService.getStatementsInfoByStatus(status);
-        log.info("Retrieved {} statements of status: {}", statements.size(), status.name()); // Лог для перевірки кількості
+        log.info("Retrieved {} statements of status: {}", statements.size(), status.name());
 
         if (statements.isEmpty()) {
             log.warn("No statements found of status: {}", status.name());
@@ -134,26 +136,28 @@ public class StatementController {
         return ResponseEntity.ok("Statement marked as READY successfully!");
     }
 
-        @GetMapping("/statusAndFaculty")
-        public ResponseEntity<List<StatementDto>> getStatementsByStatusAndFaculty(
-                @RequestParam(value = "status", required = false) StatementStatus status,
-                @RequestParam(value = "faculty", required = false) String faculty) {
-            log.info("Fetching statements for faculty: {}", faculty);
-            List<StatementDto> statements;
-            try {
-                statements = statementService.getStatementsInfoByStatusAndFaculty(status, faculty);
-            } catch (IllegalArgumentException e) {
-                log.error("Invalid faculty provided: {}", faculty, e);
-                return ResponseEntity.badRequest().body(null);
-            }
+    @GetMapping("/statusAndFaculty")
+    public ResponseEntity<List<StatementDto>> getStatementsByStatusAndFaculty(
+            @RequestParam(value = "status", required = false) StatementStatus status,
+            @RequestParam(value = "faculty", required = false) String faculty) {
 
-            if (statements.isEmpty()) {
-                log.warn("No statements found for faculty: {}", faculty);
-                return ResponseEntity.notFound().build();
-            }
+        log.info("Received request to get statements with status: {} and faculty: {}", status, faculty);
 
-            log.info("Retrieved {} statements for faculty: {}", statements.size(), faculty);
-            return ResponseEntity.ok(statements);
+        List<StatementDto> statements = new ArrayList<>();
+
+        if (status != null) {
+            log.info("Fetching statements for status: {} and faculty: {}", status, faculty);
+            statements = statementService.getStatementsInfoByStatusAndFaculty(status, faculty);
         }
+
+        if (statements.isEmpty()) {
+            log.warn("No statements found for status: {} and faculty: {}", status, faculty);
+            return ResponseEntity.ok(new ArrayList<>());
+        }
+
+        log.info("Successfully retrieved {} statements.", statements.size());
+        return ResponseEntity.ok(statements);
+    }
+
 
 }

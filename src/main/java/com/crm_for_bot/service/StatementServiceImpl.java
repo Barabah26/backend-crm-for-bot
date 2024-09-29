@@ -94,11 +94,7 @@ public class StatementServiceImpl implements StatementService {
 
     @Override
     public List<StatementDto> getStatementsInfoByStatusAndFaculty(StatementStatus status, String faculty) {
-        List<Object[]> results = statementRepository.findStatementInfoByStatusAndFaculty(status.name(), faculty); // Use status.name() to get the string value
-        if (results.isEmpty()) {
-            throw new RecourseNotFoundException("Statements are not found");
-        }
-
+        List<Object[]> results = statementRepository.findStatementInfoByStatusAndFaculty(status.name(), faculty);
         return results.stream().map(this::mapToStatementDto).collect(Collectors.toList());
     }
 
