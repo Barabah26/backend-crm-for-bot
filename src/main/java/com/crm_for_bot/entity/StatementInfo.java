@@ -42,6 +42,9 @@ public class StatementInfo {
     @Column(name = "application_status")
     private StatementStatus applicationStatus;
 
+    @OneToOne(mappedBy = "statement", cascade = CascadeType.ALL, orphanRemoval = true)
+    private FileEntity file;
+
     public void setApplicationStatus(StatementStatus applicationStatus) {
         this.applicationStatus = applicationStatus;
     }
