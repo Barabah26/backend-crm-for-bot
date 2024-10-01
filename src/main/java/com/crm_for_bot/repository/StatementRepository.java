@@ -1,10 +1,13 @@
 package com.crm_for_bot.repository;
 
 import com.crm_for_bot.entity.StatementInfo;
+import com.crm_for_bot.util.StatementStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,12 +22,12 @@ public interface StatementRepository extends JpaRepository<StatementInfo, Long> 
      *
      * @return a list of statement information with a status of false
      */
-    @Query(value = "SELECT s.id, s.full_name, s.groupe, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.is_ready " +
+    @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.is_ready " +
             "FROM statement_info si " +
             "JOIN statement s ON si.id = s.id " +
-            "WHERE si.status = false",
+            "WHERE si.application_status = 'PENDING'",
             nativeQuery = true)
-    List<Object[]> findStatementsInfoWithStatusFalse();
+    List<Object[]> findStatementsInfoWithStatusPending();
 
     /**
      * Retrieves statement information with a status of false, filtered by faculty.
@@ -32,10 +35,38 @@ public interface StatementRepository extends JpaRepository<StatementInfo, Long> 
      * @param faculty the faculty to filter by
      * @return a list of statement information with a status of false and the given faculty
      */
-    @Query(value = "SELECT s.id, s.full_name, s.groupe, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.is_ready " +
+    @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.application_status " +
             "FROM statement_info si " +
             "JOIN statement s ON si.id = s.id " +
-            "WHERE si.status = false AND s.faculty = :faculty",
+            "WHERE s.faculty = :faculty",
             nativeQuery = true)
     List<Object[]> findStatementInfoByFaculty(@Param("faculty") String faculty);
+
+    @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.application_status " +
+            "FROM statement_info si " +
+            "JOIN statement s ON si.id = s.id " +
+            "WHERE si.application_status = :status",
+            nativeQuery = true)
+    List<Object[]> findStatementInfoByStatus(@Param("status") String status);
+
+    @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.application_status " +
+            "FROM statement_info si " +
+            "JOIN statement s ON si.id = s.id " +
+            "WHERE si.application_status = :status AND s.faculty = :faculty",
+            nativeQuery = true)
+    List<Object[]> findStatementInfoByStatusAndFaculty(@Param("status") String status, @Param("faculty") String faculty);
+
+    @Modifying
+    @Query(value = "DELETE FROM statement_info si " +
+            "USING statement s " +
+            "WHERE si.application_status = :status " +
+            "AND si.id = :statementId " +
+            "AND s.faculty = :faculty " +
+            "AND si.id = s.id",
+            nativeQuery = true)
+    void deleteStatementIfReady(@Param("status") String status,
+                                @Param("statementId") Long statementId,
+                                @Param("faculty") String faculty);
+
+
 }
