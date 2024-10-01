@@ -68,5 +68,13 @@ public interface StatementRepository extends JpaRepository<StatementInfo, Long> 
                                 @Param("statementId") Long statementId,
                                 @Param("faculty") String faculty);
 
+    @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.application_status " +
+            "FROM statement_info si " +
+            "JOIN statement s ON si.id = s.id " +
+            "WHERE LOWER(s.full_name) LIKE LOWER(CONCAT('%', :name, '%'))",
+            nativeQuery = true)
+    List<Object[]> findByNameContaining(@Param("name") String name);
+
+
 
 }

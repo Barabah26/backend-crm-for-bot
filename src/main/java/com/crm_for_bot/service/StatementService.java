@@ -37,4 +37,7 @@ public interface StatementService {
     List<StatementDto> getStatementsInfoByStatusAndFaculty(StatementStatus status, String faculty);
 
     void deleteStatementIfReady(Long statementId, StatementStatus status, String faculty);
+
+    List<StatementDto> searchByName(String name);
+
 }

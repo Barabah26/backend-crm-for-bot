@@ -184,6 +184,22 @@ public class StatementController {
         }
     }
 
+    @GetMapping("/searchByName")
+    public ResponseEntity<?> searchUsersByName(@RequestParam String name) {
+        try {
+            List<StatementDto> users = statementService.searchByName(name);
+            if (!users.isEmpty()) {
+                return ResponseEntity.ok(users);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No users found");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while searching for users");
+        }
+    }
+
+
+
 
 
 }

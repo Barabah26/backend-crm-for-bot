@@ -110,4 +110,9 @@ public class StatementServiceImpl implements StatementService {
         }
     }
 
+    @Override
+    public List<StatementDto> searchByName(String name) {
+        return statementRepository.findByNameContaining(name).stream().map(this::mapToStatementDto).collect(Collectors.toList());
+    }
+
 }
