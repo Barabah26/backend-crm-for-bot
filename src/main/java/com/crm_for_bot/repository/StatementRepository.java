@@ -25,7 +25,7 @@ public interface StatementRepository extends JpaRepository<StatementInfo, Long> 
     @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.is_ready " +
             "FROM statement_info si " +
             "JOIN statement s ON si.id = s.id " +
-            "WHERE si.application_status = 'PENDING'",
+            "WHERE si.statement_status = 'PENDING'",
             nativeQuery = true)
     List<Object[]> findStatementsInfoWithStatusPending();
 
@@ -35,31 +35,31 @@ public interface StatementRepository extends JpaRepository<StatementInfo, Long> 
      * @param faculty the faculty to filter by
      * @return a list of statement information with a status of false and the given faculty
      */
-    @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.application_status " +
+    @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.statement_status " +
             "FROM statement_info si " +
             "JOIN statement s ON si.id = s.id " +
             "WHERE s.faculty = :faculty",
             nativeQuery = true)
     List<Object[]> findStatementInfoByFaculty(@Param("faculty") String faculty);
 
-    @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.application_status " +
+    @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.statement_status " +
             "FROM statement_info si " +
             "JOIN statement s ON si.id = s.id " +
-            "WHERE si.application_status = :status",
+            "WHERE si.statement_status = :status",
             nativeQuery = true)
     List<Object[]> findStatementInfoByStatus(@Param("status") String status);
 
-    @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.application_status " +
+    @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.statement_status " +
             "FROM statement_info si " +
             "JOIN statement s ON si.id = s.id " +
-            "WHERE si.application_status = :status AND s.faculty = :faculty",
+            "WHERE si.statement_status = :status AND s.faculty = :faculty",
             nativeQuery = true)
     List<Object[]> findStatementInfoByStatusAndFaculty(@Param("status") String status, @Param("faculty") String faculty);
 
     @Modifying
     @Query(value = "DELETE FROM statement_info si " +
             "USING statement s " +
-            "WHERE si.application_status = :status " +
+            "WHERE si.statement_status = :status " +
             "AND si.id = :statementId " +
             "AND s.faculty = :faculty " +
             "AND si.id = s.id",
@@ -68,7 +68,7 @@ public interface StatementRepository extends JpaRepository<StatementInfo, Long> 
                                 @Param("statementId") Long statementId,
                                 @Param("faculty") String faculty);
 
-    @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.application_status " +
+    @Query(value = "SELECT s.id, s.full_name, s.group_name, s.phone_number, s.type_of_statement, s.faculty, s.year_entry, si.statement_status " +
             "FROM statement_info si " +
             "JOIN statement s ON si.id = s.id " +
             "WHERE LOWER(s.full_name) LIKE LOWER(CONCAT('%', :name, '%'))",

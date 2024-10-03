@@ -6,9 +6,11 @@ import com.crm_for_bot.exception.RecourseNotFoundException;
 import com.crm_for_bot.repository.StatementRepository;
 import com.crm_for_bot.util.StatementStatus;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @AllArgsConstructor
+@Slf4j
 public class StatementServiceImpl implements StatementService {
 
     private final StatementRepository statementRepository;
@@ -25,9 +28,9 @@ public class StatementServiceImpl implements StatementService {
     public List<StatementDto> getStatementsInfoWithStatusPending() {
         List<Object[]> results = statementRepository.findStatementsInfoWithStatusPending();
         if (results.isEmpty()) {
-            throw new RecourseNotFoundException("Statements are not found");
+            log.warn("No statements found with status PENDING");
+            return Collections.emptyList();
         }
-
         return results.stream().map(this::mapToStatementDto).collect(Collectors.toList());
     }
 
@@ -78,7 +81,7 @@ public class StatementServiceImpl implements StatementService {
         StatementInfo statement = statementRepository.findById(statementId).orElseThrow(
                 () -> new RecourseNotFoundException("Statement is not found with id: " + statementId)
         );
-        statement.setApplicationStatus(StatementStatus.valueOf(status.name()));
+        statement.setStatementStatus(StatementStatus.valueOf(status.name()));
 
         statementRepository.save(statement);
     }

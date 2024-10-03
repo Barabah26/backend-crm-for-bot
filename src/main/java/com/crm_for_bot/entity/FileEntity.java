@@ -17,10 +17,9 @@ public class FileEntity {
 
     private String fileType;
 
-    @Lob
     private byte[] data;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "statement_id", unique = true)
-    private StatementInfo statement;
+    private StatementInfo statementInfo;
 }

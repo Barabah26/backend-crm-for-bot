@@ -39,14 +39,11 @@ public class StatementInfo {
      * This field represents the process status (e.g., "IN_PROGRESS", "COMPLETED").
      */
     @Enumerated(EnumType.STRING)
-    @Column(name = "application_status")
-    private StatementStatus applicationStatus;
+    @Column(name = "statement_status")
+    private StatementStatus statementStatus;
 
-    @OneToOne(mappedBy = "statement", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "statementInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private FileEntity file;
 
-    public void setApplicationStatus(StatementStatus applicationStatus) {
-        this.applicationStatus = applicationStatus;
-    }
 
 }

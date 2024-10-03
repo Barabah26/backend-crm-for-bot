@@ -30,7 +30,7 @@ public class FileServiceImpl implements FileService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        fileEntity.setStatement(statement);
+        fileEntity.setStatementInfo(statement);
 
         Long savedFileId = fileRepository.saveFile(fileEntity.getData(), fileEntity.getFileName(), fileEntity.getFileType(), statementId);
         if (savedFileId == null) {

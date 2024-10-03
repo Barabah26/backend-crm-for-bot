@@ -30,7 +30,7 @@ INSERT INTO statement (full_name, group_name, phone_number, faculty, type_of_sta
                                                                                                                      ('Романенко Юлія Іванівна', 'КН43с', '+380987654332', 'Факультет цивільного захисту', 'Довідка з місця навчання', 1234567801, '2021');
 
 -- Insert data into statement_info
-INSERT INTO statement_info (id, is_ready, application_status) VALUES
+INSERT INTO statement_info (id, is_ready, statement_status) VALUES
                                                                   (1, FALSE, 'PENDING'),
                                                                   (2, FALSE, 'PENDING'),
                                                                   (3, FALSE, 'PENDING'),
