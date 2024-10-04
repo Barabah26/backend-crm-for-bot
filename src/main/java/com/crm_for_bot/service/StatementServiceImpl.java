@@ -52,10 +52,18 @@ public class StatementServiceImpl implements StatementService {
         dto.setPhoneNumber((String) result[3]);
         dto.setTypeOfStatement((String) result[4]);
         dto.setFaculty((String) result[5]);
-        dto.setYearEntry((String) result[6]);
+        dto.setYearBirthday((String) result[6]);
 
+        // Assuming result[7] might be a Boolean
+        Object statusObject = result[7];
+        String statusString;
 
-        String statusString = (String) result[7];
+        if (statusObject instanceof Boolean) {
+            statusString = (Boolean) statusObject ? "READY" : "PENDING";
+        } else {
+            statusString = (String) statusObject;
+        }
+
         StatementStatus status = StatementStatus.valueOf(statusString);
         switch (status) {
             case IN_PROGRESS:
@@ -74,6 +82,7 @@ public class StatementServiceImpl implements StatementService {
 
         return dto;
     }
+
 
 
     @Override

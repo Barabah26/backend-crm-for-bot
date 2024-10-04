@@ -46,9 +46,9 @@ public class StatementDto {
     private String faculty;
 
     /**
-     * The year in which the statement was made.
+     * The student date of birth
      */
-    private String yearEntry;
+    private String yearBirthday;
 
     private String  status;
 

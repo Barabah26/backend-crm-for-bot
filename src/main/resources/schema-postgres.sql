@@ -2,7 +2,9 @@ DROP TABLE IF EXISTS user_roles CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS statement;
+DROP TABLE IF EXISTS files;
 DROP TABLE IF EXISTS statement_info;
+
 
 CREATE TABLE statement_info (
                                 id BIGINT NOT NULL UNIQUE PRIMARY KEY,
@@ -18,7 +20,7 @@ CREATE TABLE statement (
                             faculty TEXT,
                             type_of_statement TEXT,
                             telegram_id BIGINT,
-                            year_entry VARCHAR(10)
+                            year_birthday VARCHAR(10)
 );
 
 CREATE TABLE users (
