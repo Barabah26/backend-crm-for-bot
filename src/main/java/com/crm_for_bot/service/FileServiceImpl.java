@@ -1,7 +1,5 @@
 package com.crm_for_bot.service;
 
-import com.crm_for_bot.entity.FileData;
-import com.crm_for_bot.entity.FileInfo;
 import com.crm_for_bot.entity.StatementInfo;
 import com.crm_for_bot.repository.FileDataRepository;
 import com.crm_for_bot.repository.FileInfoRepository;
@@ -38,9 +36,5 @@ public class FileServiceImpl implements FileService {
             throw new RuntimeException("Error while processing file data", e);
         }
     }
-
-
-
-
 }
 
