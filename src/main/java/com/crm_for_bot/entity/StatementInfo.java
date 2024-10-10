@@ -43,7 +43,7 @@ public class StatementInfo {
     private StatementStatus statementStatus;
 
     @OneToOne(mappedBy = "statementInfo", cascade = CascadeType.ALL, orphanRemoval = true)
-    private FileEntity file;
+    private FileInfo file;
 
 
 }

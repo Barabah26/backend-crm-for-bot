@@ -1,25 +1,21 @@
 package com.crm_for_bot.entity;
 
-
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "files")
+@Table(name = "file_data")
 @Data
-public class FileEntity {
+public class FileData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fileName;
-
-    private String fileType;
-
+    @Lob
     private byte[] data;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "statement_id", unique = true)
-    private StatementInfo statementInfo;
+    @JoinColumn(name = "file_info_id", unique = true)
+    private FileInfo fileinfo;
 }

@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS statement_info;
 
 
 CREATE TABLE statement_info (
-                                id BIGINT NOT NULL UNIQUE PRIMARY KEY,
+                                id BIGSERIAL PRIMARY KEY,
                                 is_ready BOOLEAN,
                                 statement_status VARCHAR(255)
 );
@@ -43,14 +43,20 @@ CREATE TABLE user_roles (
                             PRIMARY KEY (user_id, role_id)
 );
 
-CREATE TABLE files (
-                       id SERIAL PRIMARY KEY,
-                       file_name VARCHAR(255) NOT NULL,
-                       file_type VARCHAR(255) NOT NULL,
-                       data BYTEA NOT NULL,
-                       statement_id BIGINT UNIQUE,
-                       CONSTRAINT fk_statement FOREIGN KEY (statement_id) REFERENCES statement_info(id) ON DELETE CASCADE
+CREATE TABLE file_info (
+                           id SERIAL PRIMARY KEY,
+                           file_name VARCHAR(255) NOT NULL,
+                           file_type VARCHAR(255) NOT NULL,
+                           statement_id BIGINT UNIQUE
 );
+
+CREATE TABLE file_data (
+                           id SERIAL PRIMARY KEY,
+                           data BYTEA NOT NULL,
+                           file_info_id BIGINT UNIQUE
+);
+
+
 
 
 
