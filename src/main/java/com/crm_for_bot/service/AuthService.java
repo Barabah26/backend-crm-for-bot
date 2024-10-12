@@ -28,16 +28,6 @@ public class AuthService {
     private final JwtService jwtService;
 
     /**
-     * Retrieves the list of access tokens for a given username.
-     *
-     * @param userName the username to retrieve access tokens for
-     * @return a list of access tokens associated with the given username
-     */
-    public List<String> getTokensByUser(String userName) {
-        return jwtService.getAccessStorage().get(userName);
-    }
-
-    /**
      * Handles user login by validating credentials and generating JWT tokens.
      *
      * @param authRequest the authentication request containing username and password

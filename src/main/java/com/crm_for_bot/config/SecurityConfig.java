@@ -42,32 +42,26 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // Disables basic authentication and CSRF protection
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
 
-                // Enables CORS with default settings
                 .cors(Customizer.withDefaults())
 
-                // Configures session policy to be stateless (no sessions will be created)
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                // Configures authorization rules for different endpoints
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/", "/api/auth/login", "/api/auth/revoke", "/api/jwt/",
                                         "/api/auth/token", "/swagger-ui.html", "/v3/api-docs/**",
                                         "/swagger-ui/**", "/webjars/swagger-ui/**", "/h2-console/**")
                                 .permitAll()  // Open access for these endpoints
-                                .requestMatchers("/api/statements/**").hasRole("USER")  // Only accessible to users with USER role
-                                .requestMatchers("/api/admin/**").hasRole("ADMIN")  // Only accessible to users with ADMIN role
-                                .anyRequest().authenticated()  // All other requests require authentication
+                                .requestMatchers("/api/statements/**").hasRole("USER")
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                .anyRequest().authenticated()
                 )
 
-                // Adds JWT filter after UsernamePasswordAuthenticationFilter
                 .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 
-                // Configures exception handling for access denial
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling.accessDeniedPage("/403")
                 );
@@ -84,20 +78,16 @@ public class SecurityConfig {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Allowed origins
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
 
-        // Allowed HTTP methods
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
-        // Allowed headers
         configuration.setAllowedHeaders(Arrays.asList("*"));
 
-        // Allows credentials (e.g., cookies)
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);  // Applies the configuration to all routes
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 

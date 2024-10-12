@@ -29,7 +29,6 @@ public class CrmForBotApplication {
     public static void main(String[] args) {
         SpringApplication.run(CrmForBotApplication.class, args);
         System.out.println("http://localhost:9000/swagger-ui/index.html");
-        System.out.println("http://localhost:9000/h2-console");
     }
 
     /**

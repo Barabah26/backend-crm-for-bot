@@ -11,8 +11,6 @@ logging:
     org: info
     com.crm_for_bot: info
 
-
-
 ---
 spring:
   security:
@@ -29,12 +27,6 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
-
----
-
-spring:
-  mvc:
-    static-path-pattern: /static/**
 ---
 
 spring:

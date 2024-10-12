@@ -10,9 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
 
-    @Query("SELECT f FROM FileInfo f WHERE f.statementInfo = :statementInfo")
-    FileInfo findByStatementInfo(@Param("statementInfo") StatementInfo statementInfo);
-
     @Query(value = "INSERT INTO file_info (file_name, file_type, statement_id) " +
             "VALUES (:fileName, :fileType, :statementId) " +
             "ON CONFLICT (statement_id) DO UPDATE SET " +

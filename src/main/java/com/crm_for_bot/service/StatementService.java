@@ -18,21 +18,11 @@ public interface StatementService {
     List<StatementDto> getStatementsInfoWithStatusPending();
 
     /**
-     * Retrieves statements based on the faculty.
-     *
-     * @param faculty the faculty name to filter by
-     * @return a list of StatementDto objects
-     */
-    List<StatementDto> getStatementsInfoByFaculty(String faculty);
-
-    /**
      * Updates the status of a statement to true.
      *
      * @param statementId the ID of the statement to update
      */
     void updateStatementStatus(Long statementId, StatementStatus status);
-
-    List<StatementDto> getStatementsInfoByStatus(StatementStatus status);
 
     List<StatementDto> getStatementsInfoByStatusAndFaculty(StatementStatus status, String faculty);
 

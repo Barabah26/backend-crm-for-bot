@@ -28,16 +28,6 @@ public class JwtUtils {
     }
 
     /**
-     * Extracts the user ID from the JWT token.
-     *
-     * @param token the JWT token
-     * @return the user ID from the token
-     */
-    public Long getUserIdFromToken(String token) {
-        return Long.parseLong(getAllClaimsFromToken(token, accessTokenSecret).get("userId").toString());
-    }
-
-    /**
      * Extracts the roles from the JWT token.
      *
      * @param token the JWT token

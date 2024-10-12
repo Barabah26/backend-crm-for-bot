@@ -137,15 +137,6 @@ public class JwtProvider {
         return getClaims(token, jwtAccessSecret);
     }
 
-    /**
-     * Extracts claims from a refresh token.
-     *
-     * @param token the refresh token from which claims are extracted
-     * @return the claims extracted from the token
-     */
-    public Claims getRefreshClaims(@NonNull String token) {
-        return getClaims(token, jwtRefreshSecret);
-    }
 
     private Claims getClaims(@NonNull String token, @NonNull Key secret) {
         return Jwts.parserBuilder()

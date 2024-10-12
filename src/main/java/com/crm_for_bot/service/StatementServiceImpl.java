@@ -34,15 +34,6 @@ public class StatementServiceImpl implements StatementService {
         return results.stream().map(this::mapToStatementDto).collect(Collectors.toList());
     }
 
-    @Override
-    public List<StatementDto> getStatementsInfoByFaculty(String faculty) {
-        List<Object[]> results = statementRepository.findStatementInfoByFaculty(faculty);
-        if (results.isEmpty()) {
-            throw new RecourseNotFoundException("Statements are not found");
-        }
-
-        return results.stream().map(this::mapToStatementDto).collect(Collectors.toList());
-    }
 
     private StatementDto mapToStatementDto(Object[] result) {
         StatementDto dto = new StatementDto();
@@ -54,7 +45,6 @@ public class StatementServiceImpl implements StatementService {
         dto.setFaculty((String) result[5]);
         dto.setYearBirthday((String) result[6]);
 
-        // Assuming result[7] might be a Boolean
         Object statusObject = result[7];
         String statusString;
 
@@ -93,16 +83,6 @@ public class StatementServiceImpl implements StatementService {
         statement.setStatementStatus(StatementStatus.valueOf(status.name()));
 
         statementRepository.save(statement);
-    }
-
-    @Override
-    public List<StatementDto> getStatementsInfoByStatus(StatementStatus status) {
-        List<Object[]> results = statementRepository.findStatementInfoByStatus(status.name());
-        if (results.isEmpty()) {
-            throw new RecourseNotFoundException("Statements are not found");
-        }
-
-        return results.stream().map(this::mapToStatementDto).collect(Collectors.toList());
     }
 
     @Override

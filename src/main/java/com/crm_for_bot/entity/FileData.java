@@ -12,7 +12,6 @@ public class FileData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob
     private byte[] data;
 
     @OneToOne(fetch = FetchType.LAZY)

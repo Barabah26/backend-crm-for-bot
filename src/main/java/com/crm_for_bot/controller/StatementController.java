@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -46,52 +45,6 @@ public class StatementController {
         return ResponseEntity.ok(statements);
     }
 
-    /**
-     * Retrieves statements for a specific faculty.
-     *
-     * @param faculty the faculty name to filter the statements.
-     * @return ResponseEntity<List<StatementDto>> - the response containing a list of statements for the given faculty, or no content if none found.
-     */
-    @GetMapping("faculty/{faculty}")
-    public ResponseEntity<List<StatementDto>> getStatementsByFaculty(@PathVariable("faculty") String faculty) {
-        log.info("Fetching statements for faculty: {}", faculty);
-        List<StatementDto> statements;
-        try {
-            statements = statementService.getStatementsInfoByFaculty(faculty);
-        } catch (IllegalArgumentException e) {
-            log.error("Invalid faculty provided: {}", faculty, e);
-            return ResponseEntity.badRequest().body(null);
-        }
-
-        if (statements.isEmpty()) {
-            log.warn("No statements found for faculty: {}", faculty);
-            return ResponseEntity.noContent().build();
-        }
-
-        log.info("Retrieved {} statements for faculty: {}", statements.size(), faculty);
-        return ResponseEntity.ok(statements);
-    }
-    @GetMapping("status/{status}")
-    public ResponseEntity<List<StatementDto>> getStatementsByStatus(@PathVariable("status") String statusStr) {
-        StatementStatus status;
-        try {
-            status = StatementStatus.valueOf(statusStr.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            log.error("Invalid status provided: {}", statusStr, e);
-            return ResponseEntity.badRequest().build();
-        }
-
-        log.info("Fetching statements of status: {}", status.name());
-        List<StatementDto> statements = statementService.getStatementsInfoByStatus(status);
-        log.info("Retrieved {} statements of status: {}", statements.size(), status.name());
-
-        if (statements.isEmpty()) {
-            log.warn("No statements found of status: {}", status.name());
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok(statements);
-    }
 
     /**
      * Marks a statement as "IN_PROGRESS" based on its ID.
@@ -99,7 +52,7 @@ public class StatementController {
      * @param statementId the ID of the statement to update.
      * @return ResponseEntity<String> - the response indicating the result of the update operation.
      */
-    @PutMapping("{id}/in-progress")
+    @PutMapping("{id}/in-progress") //
     public ResponseEntity<String> markStatementInProgress(@PathVariable("id") Long statementId) {
         log.info("Marking statement ID: {} as IN_PROGRESS", statementId);
         try {
@@ -122,7 +75,7 @@ public class StatementController {
      * @return ResponseEntity<String> - the response indicating the result of the update operation.
      */
     @PutMapping("{id}/ready")
-    public ResponseEntity<String> markStatementReady(@PathVariable("id") Long statementId) {
+    public ResponseEntity<String> markStatementReady(@PathVariable("id") Long statementId) { //
         log.info("Marking statement ID: {} as READY", statementId);
         try {
             statementService.updateStatementStatus(statementId, StatementStatus.READY);
@@ -137,7 +90,7 @@ public class StatementController {
         return ResponseEntity.ok("Statement marked as READY successfully!");
     }
 
-    @GetMapping("/statusAndFaculty")
+    @GetMapping("/statusAndFaculty") //
     public ResponseEntity<List<StatementDto>> getStatementsByStatusAndFaculty(
             @RequestParam(value = "status", required = false) StatementStatus status,
             @RequestParam(value = "faculty", required = false) String faculty) {
@@ -160,7 +113,7 @@ public class StatementController {
         return ResponseEntity.ok(statements);
     }
 
-    @DeleteMapping("/ready")
+    @DeleteMapping("/ready") //
     public ResponseEntity<Void> completeStatementIfReady(
             @RequestParam Long statementId,
             @RequestParam(value = "status", required = false) StatementStatus status,
@@ -184,7 +137,7 @@ public class StatementController {
         }
     }
 
-    @GetMapping("/searchByName")
+    @GetMapping("/searchByName") //
     public ResponseEntity<?> searchUsersByName(@RequestParam String name) {
         try {
             List<StatementDto> users = statementService.searchByName(name);
