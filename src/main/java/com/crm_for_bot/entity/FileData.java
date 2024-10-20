@@ -14,7 +14,7 @@ public class FileData {
 
     private byte[] data;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "file_info_id", unique = true)
     private FileInfo fileinfo;
 }

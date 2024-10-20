@@ -56,6 +56,7 @@ public interface StatementRepository extends JpaRepository<StatementInfo, Long> 
             nativeQuery = true)
     List<Object[]> findStatementInfoByStatusAndFaculty(@Param("status") String status, @Param("faculty") String faculty);
 
+    @Transactional
     @Modifying
     @Query(value = "DELETE FROM statement_info si " +
             "USING statement s " +

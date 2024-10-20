@@ -21,14 +21,15 @@ public class FileInfo {
 
     private String fileType;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "statement_id", unique = true)
     private StatementInfo statementInfo;
 
-    @OneToOne(mappedBy = "fileinfo", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "fileinfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private FileData fileData;
 
     public FileInfo(Long id) {
         this.id = id;
     }
 }
+
